@@ -1,0 +1,20 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax PA, dois casos lado a lado",
+ "regiao": "tórax",
+ "achado": "em A, nódulo calcificado no parênquima (marcado); em B, o mesmo nódulo acompanhado de linfonodo hilar calcificado (seta)",
+ "diagnostico": "nódulo calcificado por tuberculose e complexo de Ranke",
+ "confirmado": "rótulo da aula: slide 'B: Breath — Nódulo calcificado (TB) / Complexo de Ranke' (aula de radiografia do internato)",
+ "sinal": "complexo de Ranke",
+ "alt": "Duas radiografias de tórax com nódulo calcificado e complexo de Ranke",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula AULA 1 - RX, slide 65",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/torax-rx-complexo-ranke-001.webp",
+ "dimensoes": [
+  601,
+  375
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/rx-142.png"
+}

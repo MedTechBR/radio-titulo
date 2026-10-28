@@ -1,0 +1,20 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste, axial",
+ "regiao": "neuro",
+ "achado": "perda de definição do núcleo lentiforme, com apagamento da interface entre substância cinzenta e branca nos gânglios da base (marcações)",
+ "diagnostico": "apagamento do núcleo lentiforme — sinal precoce de isquemia",
+ "confirmado": "rótulo da aula: slide 'Sinais precoces de isquemia na tomografia' (aula de AVC do internato, 2026)",
+ "sinal": "apagamento do núcleo lentiforme",
+ "alt": "Tomografia de crânio axial com núcleo lentiforme apagado, marcado por círculos",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ACIDENTE VASCULAR ENCEFÁLICO, slide 35",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/neuro-tc-lentiforme-apagado-001.webp",
+ "dimensoes": [
+  630,
+  600
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/avc-065.png"
+}

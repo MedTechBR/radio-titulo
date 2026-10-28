@@ -1,0 +1,20 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste, axial",
+ "regiao": "neuro",
+ "achado": "coleção extra-axial hiperdensa em crescente acompanhando a convexidade, cruzando linhas de sutura, com desvio da linha média e enfisema de partes moles adjacente",
+ "diagnostico": "hematoma subdural agudo",
+ "confirmado": "rótulo da aula: slide 'HEMATOMA SUBDURAL' (aula de trauma do internato)",
+ "sinal": "coleção em crescente",
+ "alt": "Tomografia de crânio com coleção subdural em crescente e desvio da linha média",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ABORDAGEM AO TRAUMA, slide 73",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/neuro-tc-hematoma-subdural-001.webp",
+ "dimensoes": [
+  1159,
+  1415
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/trauma-subdural.png"
+}

@@ -1,0 +1,20 @@
+{
+ "modalidade": "RX",
+ "sequencia": "bacia em AP",
+ "regiao": "musculoesquelético",
+ "achado": "alargamento da sínfise púbica (seta dupla), com o anel pélvico aberto anteriormente",
+ "diagnostico": "diástase da sínfise púbica — lesão do anel pélvico em livro aberto",
+ "confirmado": "rótulo da aula de trauma do internato (slide de fratura de bacia)",
+ "sinal": "livro aberto",
+ "alt": "Radiografia de bacia em AP com alargamento da sínfise púbica marcado por seta dupla",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ABORDAGEM AO TRAUMA, slide 59",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/msk-rx-diastase-sinfise-001.webp",
+ "dimensoes": [
+  600,
+  450
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/trauma-bacia.png"
+}

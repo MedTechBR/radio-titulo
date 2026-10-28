@@ -1,0 +1,20 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax PA",
+ "regiao": "tórax",
+ "achado": "imagem arredondada com nível hidroaéreo projetada atrás da silhueta cardíaca, na região retrocardíaca",
+ "diagnostico": "nível hidroaéreo retrocardíaco — aspecto clássico de hérnia hiatal",
+ "confirmado": "rótulo da aula: slide 'E: Esqueleto e esquecidos' (aula de radiografia do internato)",
+ "sinal": "nível hidroaéreo retrocardíaco",
+ "alt": "Radiografia de tórax PA com nível hidroaéreo projetado atrás do coração",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula AULA 1 - RX, slide 105",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/torax-rx-hernia-hiatal-001.webp",
+ "dimensoes": [
+  686,
+  534
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/s105-001.png"
+}

@@ -1,0 +1,20 @@
+{
+ "modalidade": "RX",
+ "sequencia": "AP de abdome",
+ "regiao": "pediatria",
+ "achado": "duas bolhas gasosas no andar superior do abdome (estômago e bulbo duodenal, parcialmente descomprimidas pela sonda gástrica presente), sem gás intestinal distal — sinal da dupla bolha",
+ "diagnostico": "atresia duodenal",
+ "confirmado": "relato da fonte (paciente com diagnóstico firmado de atresia duodenal)",
+ "sinal": "dupla bolha",
+ "alt": "Radiografia AP de abdome de recém-nascido com duas bolhas de ar no andar superior e abdome distal sem gás",
+ "fonte": "Wikimedia Commons: File:Radiograph with Double Bubble Sign.jpg",
+ "licenca": "CC BY-SA 4.0",
+ "autor": "JasonRobertYoungMD",
+ "descricao_fonte": "Frontal view of the abdomen with double bubble sign, patient was found to have duodenal atresia.",
+ "arquivo": "img/ped-rx-dupla-bolha-001.webp",
+ "dimensoes": [
+  643,
+  723
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Radiograph_with_Double_Bubble_Sign.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+}

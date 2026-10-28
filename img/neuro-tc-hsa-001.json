@@ -1,0 +1,27 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste",
+ "regiao": "neuro",
+ "achado": "hiperdensidade espontânea na cisterna suprasselar e fissuras basais (linha diagonal na imagem = artefato de localizador da fonte)",
+ "diagnostico": "hemorragia subaracnóidea aguda",
+ "confirmado": "achado autoevidente na TC (sangue cisternal agudo)",
+ "sinal": "hiperdensidade cisternal",
+ "alt": "TC de crânio sem contraste com hiperdensidade nas cisternas da base e fissuras",
+ "fonte": "Wikimedia Commons: File:CT scan - subarachnoid hemorrhage.jpg",
+ "licenca": "CC BY-SA 3.0",
+ "autor": "Dr. George Jallo",
+ "descricao_fonte": "Image showing a subarachnoid hemorrhage.",
+ "arquivo": "img/neuro-tc-hsa-001.webp",
+ "dimensoes": [
+  695,
+  905
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/CT_scan_-_subarachnoid_hemorrhage.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "anot": [
+  {
+   "x": 0.47,
+   "y": 0.44,
+   "r": 0.13
+  }
+ ]
+}

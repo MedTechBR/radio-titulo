@@ -1,0 +1,19 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax PA e perfil",
+ "regiao": "tórax",
+ "achado": "opacidade arredondada de contornos definidos junto à base, confirmada nas duas incidências (setas)",
+ "diagnostico": "nódulo pulmonar",
+ "confirmado": "rótulo da aula: slide 'Nódulos e massas' (aula de radiografia do internato)",
+ "alt": "Radiografia de tórax em PA e perfil com nódulo pulmonar indicado por setas",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula AULA 1 - RX, slide 48",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/torax-rx-nodulo-duas-incidencias-001.webp",
+ "dimensoes": [
+  1600,
+  674
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/s048-001.png"
+}

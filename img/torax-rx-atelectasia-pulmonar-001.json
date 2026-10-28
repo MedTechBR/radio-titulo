@@ -1,0 +1,19 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax PA",
+ "regiao": "tórax",
+ "achado": "hemitórax direito totalmente opaco, com a traqueia e o mediastino desviados PARA o lado da opacidade e os arcos costais aproximados",
+ "diagnostico": "atelectasia pulmonar total",
+ "confirmado": "rótulo da aula: slide 'Atelectasia pulmonar' (aula de radiografia do internato)",
+ "sinal": "desvio do mediastino para o lado da opacidade",
+ "alt": "Radiografia de tórax com hemitórax direito opaco e mediastino desviado para o mesmo lado",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula AULA 1 - RX, slide 43",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "arquivo": "img/torax-rx-atelectasia-pulmonar-001.webp",
+ "dimensoes": [
+  390,
+  442
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/rx-089.png"
+}

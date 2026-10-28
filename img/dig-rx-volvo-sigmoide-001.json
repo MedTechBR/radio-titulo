@@ -1,0 +1,20 @@
+{
+ "modalidade": "RX",
+ "sequencia": "AP de abdome",
+ "regiao": "abdome",
+ "achado": "alça colônica única muito distendida, dobrada sobre o próprio mesentério, em morfologia de grão de café",
+ "diagnostico": "volvo de sigmoide (caso pediátrico, 10 anos — apresentação incomum pela idade)",
+ "confirmado": "descrição do caso na fonte",
+ "sinal": "grão de café",
+ "alt": "Radiografia AP de abdome com alça única enormemente distendida em forma de grão de café",
+ "fonte": "Wikimedia Commons: File:Sigmoidvolvulus.jpg",
+ "licenca": "CC0",
+ "autor": "Mont4nha",
+ "descricao_fonte": "Abdominal radiography with a sigmoid volvulus in a 10 year old child.",
+ "arquivo": "img/dig-rx-volvo-sigmoide-001.webp",
+ "dimensoes": [
+  510,
+  624
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Sigmoidvolvulus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+}

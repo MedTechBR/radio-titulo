@@ -1,0 +1,28 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste, janela de partes moles",
+ "regiao": "neuro",
+ "achado": "coleção extra-axial hiperdensa biconvexa parieto-occipital à esquerda (imagem: lado direito), com efeito de massa; área de hiperdensidade contralateral compatível com contusão associada",
+ "diagnostico": "hematoma epidural agudo com fratura de crânio",
+ "confirmado": "achado autoevidente na TC (coleção biconvexa hiperdensa pós-trauma) conforme relato da fonte",
+ "sinal": "coleção biconvexa",
+ "alt": "TC de crânio sem contraste com coleção biconvexa hiperdensa junto à calota, comprimindo o parênquima",
+ "fonte": "Wikimedia Commons: File:EpiduralHematoma.jpg",
+ "licenca": "CC BY-SA 4.0",
+ "autor": "James Heilman, MD",
+ "descricao_fonte": "Epidural hematoma on the persons left (images right) with an associated skull fracture. Also has some bleeding on the persons right.",
+ "arquivo": "img/neuro-tc-hematoma-epidural-001.webp",
+ "dimensoes": [
+  784,
+  963
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/EpiduralHematoma.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "setaNaFonte": true,
+ "anot": [
+  {
+   "x": 0.79,
+   "y": 0.57,
+   "r": 0.17
+  }
+ ]
+}

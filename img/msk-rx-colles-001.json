@@ -1,0 +1,33 @@
+{
+ "modalidade": "RX",
+ "sequencia": "punho em duas incidências",
+ "regiao": "musculoesquelético",
+ "achado": "fratura da metáfise distal do rádio com desvio dorsal do fragmento (deformidade em dorso de garfo) e fratura do processo estiloide da ulna",
+ "diagnostico": "fratura de Colles com fratura do estiloide ulnar",
+ "confirmado": "achado autoevidente na radiografia (traço de fratura com desvio)",
+ "sinal": "dorso de garfo",
+ "alt": "Radiografia de punho esquerdo com fratura do rádio distal desviada dorsalmente e fratura do estiloide da ulna",
+ "fonte": "Wikimedia Commons: File:Collesfracture.jpg",
+ "licenca": "CC BY-SA 3.0",
+ "autor": "Lucien Monfils",
+ "descricao_fonte": "X-ray of a collesfracture of the left wrist accompanied by an ulnar styloid fracture.",
+ "arquivo": "img/msk-rx-colles-001.webp",
+ "dimensoes": [
+  1448,
+  1600
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Collesfracture.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "setaNaFonte": true,
+ "anot": [
+  {
+   "x": 0.36,
+   "y": 0.53,
+   "r": 0.1
+  },
+  {
+   "x": 0.7,
+   "y": 0.5,
+   "r": 0.1
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste",
+ "regiao": "neuro",
+ "achado": "coleção extra-axial em crescente frontoparietal esquerda, cruzando suturas, com importante desvio da linha média",
+ "diagnostico": "hematoma subdural volumoso com herniação subfalcina",
+ "confirmado": "achado autoevidente na TC conforme descrição da fonte",
+ "sinal": "coleção em crescente",
+ "alt": "TC de crânio com coleção em crescente à esquerda comprimindo o hemisfério e desviando a linha média",
+ "fonte": "Wikimedia Commons: File:Subduralandherniation.PNG",
+ "licenca": "CC BY-SA 3.0",
+ "autor": "James Heilman, MD",
+ "descricao_fonte": "Large left sided frontal parietal subdural hematoma with associated midline shift",
+ "arquivo": "img/neuro-tc-subdural-001.webp",
+ "dimensoes": [
+  774,
+  965
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Subduralandherniation.PNG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "setaNaFonte": true
+}

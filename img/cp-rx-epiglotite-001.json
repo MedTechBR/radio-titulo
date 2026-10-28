@@ -1,0 +1,28 @@
+{
+ "modalidade": "RX",
+ "sequencia": "cervical em perfil, partes moles",
+ "regiao": "cabeça e pescoço",
+ "achado": "epiglote acentuadamente edemaciada e espessada, arredondada — sinal do polegar",
+ "diagnostico": "epiglotite aguda",
+ "confirmado": "descrição do caso na fonte (sinal clássico autoevidente)",
+ "sinal": "sinal do polegar",
+ "alt": "Radiografia cervical em perfil com epiglote espessada em forma de polegar",
+ "fonte": "Wikimedia Commons: File:Epiglottitis.jpg",
+ "licenca": "CC0",
+ "autor": "Med Chaos",
+ "descricao_fonte": "Acute epiglottitis; Lateral view in X-ray imaging. The lateral soft-tissue radiograph reveals the \"thumb sign\" that indicates a swollen epiglottis, suggestive of epiglottitis. The diagnosis was confirmed on subsequent imaging and laryngoscopy. The patient recovered following treatment with predonine and ceftriaxone .",
+ "arquivo": "img/cp-rx-epiglotite-001.webp",
+ "dimensoes": [
+  400,
+  628
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Epiglottitis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "setaNaFonte": true,
+ "anot": [
+  {
+   "x": 0.3,
+   "y": 0.66,
+   "r": 0.12
+  }
+ ]
+}

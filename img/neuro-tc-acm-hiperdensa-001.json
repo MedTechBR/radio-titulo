@@ -1,0 +1,20 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio sem contraste, axial",
+ "regiao": "neuro",
+ "achado": "artéria cerebral média hiperdensa no seu trajeto proximal (seta), sem hipodensidade parenquimatosa estabelecida",
+ "diagnostico": "sinal da artéria cerebral média hiperdensa — trombo intraluminal, marcador de oclusão de grande vaso",
+ "confirmado": "rótulo da aula: slide 'Sinais precoces de isquemia na tomografia' (aula de AVC do internato, 2026)",
+ "sinal": "artéria cerebral média hiperdensa",
+ "alt": "Tomografia de crânio axial com artéria cerebral média hiperdensa indicada por seta",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ACIDENTE VASCULAR ENCEFÁLICO, slide 35",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/neuro-tc-acm-hiperdensa-001.webp",
+ "dimensoes": [
+  499,
+  491
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/avc-066.png"
+}

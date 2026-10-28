@@ -1,0 +1,18 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax em AP de leito",
+ "regiao": "tórax",
+ "achado": "opacidades alveolares confluentes, sem respeitar limites lobares e sem broncograma bem definido, em paciente vitimado por trauma",
+ "diagnostico": "contusão pulmonar",
+ "confirmado": "rótulo da aula: slide 'CONTUSÃO PULMONAR' (aula de trauma do internato)",
+ "alt": "Radiografia de tórax em AP com opacidades alveolares difusas por contusão pulmonar",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ABORDAGEM AO TRAUMA, slide 38",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "arquivo": "img/torax-rx-contusao-pulmonar-001.webp",
+ "dimensoes": [
+  1000,
+  586
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/trauma-contusao.png"
+}

@@ -1,0 +1,20 @@
+{
+ "modalidade": "TC",
+ "sequencia": "janela pulmonar, bases",
+ "regiao": "tórax",
+ "achado": "reticulado periférico subpleural com faveolamento incipiente posterior, predominando à esquerda neste corte",
+ "diagnostico": "pneumonia intersticial usual (padrão UIP) com fibrose basal",
+ "confirmado": "padrão tomográfico do caso descrito na fonte",
+ "sinal": "faveolamento",
+ "alt": "TC de tórax em janela pulmonar com cistos subpleurais empilhados nas bases em faveolamento",
+ "fonte": "Wikimedia Commons: File:UIP (Usual interstitial pneumonia)-CT scan.jpg",
+ "licenca": "CC BY-SA 2.0",
+ "autor": "Yale Rosen",
+ "descricao_fonte": "UIP (Usual interstitial pneumonia)-CT scan Honeycomb fibrosis is seen at the bases of both lungs.",
+ "arquivo": "img/torax-tc-uip-favo-001.webp",
+ "dimensoes": [
+  512,
+  402
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/7/79/UIP_%28Usual_interstitial_pneumonia%29-CT_scan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+}

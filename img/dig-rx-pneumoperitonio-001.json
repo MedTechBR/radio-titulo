@@ -1,0 +1,21 @@
+{
+ "modalidade": "RX",
+ "sequencia": "tórax PA em ortostase",
+ "regiao": "abdome",
+ "achado": "composição RX + TC anotada na fonte: ar livre subdiafragmático à esquerda no RX em ortostase; TC axial com faixa de pneumoperitônio anterior ao fígado",
+ "diagnostico": "pneumoperitônio (perfuração de víscera oca)",
+ "confirmado": "TC do mesmo caso demonstrando pneumoperitônio extenso (relato da fonte)",
+ "sinal": "ar subdiafragmático",
+ "alt": "Radiografia de tórax em pé com faixa de ar livre sob a cúpula diafragmática esquerda",
+ "fonte": "Wikimedia Commons: File:Chest X-ray showing presence of free air under left diaphragm.png",
+ "licenca": "CC BY-SA 4.0",
+ "autor": "Cerevisae",
+ "descricao_fonte": "Chest X-ray showing the presence of free air under the left diaphragm. CT abdomen shows extensive pneumoperitoneum.",
+ "arquivo": "img/dig-rx-pneumoperitonio-001.webp",
+ "dimensoes": [
+  1600,
+  914
+ ],
+ "origem_url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Chest_X-ray_showing_presence_of_free_air_under_left_diaphragm.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+ "espoiler": true
+}

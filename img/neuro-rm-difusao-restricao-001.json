@@ -1,0 +1,18 @@
+{
+ "modalidade": "RM",
+ "sequencia": "difusão (DWI), axial",
+ "regiao": "neuro",
+ "achado": "dois focos de restrição à difusão no mesmo hemisfério, um cortical e outro mais posterior",
+ "diagnostico": "infarto agudo com restrição à difusão em mais de um foco do mesmo território",
+ "confirmado": "rótulo da aula: slide 'O padrão da lesão sugere o mecanismo' (aula de AVC do internato, 2026)",
+ "alt": "Sequência de difusão axial com dois focos de restrição no mesmo hemisfério",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ACIDENTE VASCULAR ENCEFÁLICO, slide 67",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "arquivo": "img/neuro-rm-difusao-restricao-001.webp",
+ "dimensoes": [
+  512,
+  512
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/avc-098.png"
+}

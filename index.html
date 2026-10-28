@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F7F5F1">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>RadioTítulo</title>
+<!-- conta + sincronização (cópia de ~/Documents/Claude/_mtsync/). Síncrono no <head>: o portão
+     cobre a tela antes do primeiro pixel do app e só sai com a conta confirmada. -->
+<script src="mtsync.js"></script>
+<style>
+@font-face{font-family:'STIX Two Text';src:url('vendor/fonts/stix-two-text.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+:root{--bg:#F7F5F1;--pan:#FFFFFF;--pan2:#F1EEE8;--line:#E4E0D7;--linha2:#D6D1C4;--ink:#20242B;--mut:#63707E;--brand:#0E5A6D;--brand2:#0A4854;--tinta:#E4EFF0;--ok:#166534;--err:#B4231F;--warn:#A16207;--r:10px;--serif:'STIX Two Text',Georgia,'Times New Roman',serif;--sh:0 1px 2px rgba(32,36,43,.05),0 2px 6px rgba(32,36,43,.04)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 Inter,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select,textarea{font-size:16px;font-family:inherit;background:#fff;color:var(--ink);border:1px solid var(--linha2);border-radius:8px;padding:8px 10px}
+input:focus,select:focus,textarea:focus{outline:2px solid #9FC3CB;outline-offset:0;border-color:var(--brand)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--brand)}
+a{color:var(--brand2)}
+svg.ic{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#faixas{position:sticky;top:0;z-index:50}
+.faixa{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;font-size:13.5px;border-bottom:1px solid var(--line)}
+.faixa.ok{background:#E6F4EA;color:#14532D}.faixa.erro{background:#FBEAE9;color:#7F1D1D}.faixa.info{background:#E7F0F2;color:#0A4854}
+.faixa button{margin-left:auto;color:inherit;opacity:.6;font-size:16px;padding:0 4px}
+/* ---------- cabeçalho editorial ---------- */
+header{position:sticky;top:0;z-index:40;background:rgba(247,245,241,.95);backdrop-filter:blur(10px)}
+.topo{display:flex;align-items:baseline;gap:12px;padding:14px 16px 8px;max-width:900px;margin:0 auto}
+.topo .marca{display:flex;align-items:center;gap:9px}
+.topo h1{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:.2px;color:var(--ink)}
+.topo h1 em{font-style:normal;color:var(--brand)}
+.topo .sub{color:var(--mut);font-size:11.5px;margin-left:auto;text-align:right;letter-spacing:.2px}
+.regua{max-width:900px;margin:0 auto;padding:0 16px}
+.regua i{display:block;border-top:2px solid var(--ink);border-bottom:1px solid var(--linha2);height:4px}
+nav{display:flex;gap:2px;overflow-x:auto;padding:2px 8px 0;scrollbar-width:none;max-width:900px;margin:0 auto}
+nav::-webkit-scrollbar{display:none}
+nav button{display:flex;align-items:center;gap:6px;padding:9px 11px;color:var(--mut);font-size:12.5px;font-weight:600;letter-spacing:.35px;text-transform:uppercase;border-bottom:2px solid transparent;white-space:nowrap;min-height:42px}
+nav button svg.ic{width:16px;height:16px;stroke-width:1.8}
+nav button:hover{color:var(--ink)}
+nav button.on{color:var(--brand);border-bottom-color:var(--brand)}
+header{border-bottom:1px solid var(--line)}
+main{max-width:900px;margin:0 auto;padding:18px 16px 64px}
+section{display:none}section.on{display:block}
+/* ---------- cartões e títulos ---------- */
+.cartao{background:var(--pan);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+.cartao h2{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ink);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.linha{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;background:var(--brand);color:#fff;border-radius:8px;padding:10px 16px;font-weight:600;font-size:14px;min-height:42px;transition:background .15s}
+.btn:hover{background:var(--brand2)}
+.btn.fant{background:#fff;border:1px solid var(--linha2);color:#3E4A56;font-weight:500}
+.btn.fant:hover{background:var(--pan2)}
+.btn.perigo{background:var(--err);color:#fff}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--mut);background:var(--pan2);border:1px solid var(--linha2)}
+.chip.tema{background:var(--tf,var(--pan2));color:var(--tt,var(--mut));border:none}
+.chip.real{color:#14532D;background:#DCEFE2;border:none}
+.chip.aut{color:var(--mut)}
+.mut{color:var(--mut)}.peq{font-size:12.5px}
+.gd{font-family:var(--serif);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--mut);text-align:left;font-weight:600;font-size:11px;padding:6px 8px;border-bottom:1px solid var(--linha2);text-transform:uppercase;letter-spacing:.5px}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.clic{cursor:pointer}tr.clic:hover{background:#FBFAF6}
+.ponto{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:baseline}
+.vermelho{color:var(--err)}.verde{color:var(--ok)}.ambar{color:var(--warn)}
+.rolagem{overflow-x:auto}
+/* ---------- questões ---------- */
+.q-topo{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.q-num{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--mut);margin-left:auto;font-variant-numeric:tabular-nums}
+.q-enun{font-size:15.5px;margin:10px 0 14px;white-space:pre-wrap;line-height:1.68}
+.q-img{position:relative;margin:0 0 14px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#10151B;cursor:zoom-in}
+.q-img img{display:block;width:100%;max-height:420px;object-fit:contain}
+.q-img .lupa{position:absolute;right:8px;bottom:8px;background:rgba(255,255,255,.93);border-radius:7px;padding:4px 9px;font-size:12px;color:#3E4A56}
+.alt{display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:8px;background:#FDFCF9;font-size:14.5px;touch-action:pan-y;position:relative;transition:border-color .15s,background .15s}
+.alt:hover{border-color:#A9C5CB}
+.alt .letra{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--linha2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--mut);background:#fff}
+.alt.sel{border-color:var(--brand);background:var(--tinta)}
+.alt.sel .letra{background:var(--brand);border-color:var(--brand);color:#fff}
+.alt.certa{border-color:#5CA97C;background:#EDF7F0}
+.alt.certa .letra{background:var(--ok);border-color:var(--ok);color:#fff}
+.alt.errada{border-color:#DA9490;background:#FAEFEE}
+.alt.errada .letra{background:var(--err);border-color:var(--err);color:#fff}
+.alt.riscada .txt{text-decoration:line-through;opacity:.45}
+.alt .risco{margin-left:auto;flex:none;color:var(--mut);opacity:.4;padding:2px}
+.alt .risco:hover{opacity:.9}
+.alt .risco svg{width:15px;height:15px}
+.coment{border-left:3px solid var(--brand);background:#F4F7F5;border-radius:0 9px 9px 0;padding:13px 14px;margin-top:12px;font-size:14px}
+.coment .porq{margin-top:9px;padding-top:9px;border-top:1px solid #DCE4DE}
+.coment .porq div{margin-bottom:5px}
+.navq{display:flex;gap:8px;margin-top:14px;align-items:center}
+/* ---------- simulado ---------- */
+.gradeSim{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px}
+.gradeSim button{border:1px solid var(--line);border-radius:8px;padding:8px 0;font-family:var(--serif);font-size:13px;font-weight:600;color:var(--mut);background:#fff}
+.gradeSim button.resp{background:var(--tinta);color:var(--brand2);border-color:#9FC3CB}
+.gradeSim button.atual{outline:2px solid var(--brand);outline-offset:1px}
+.gradeSim button.certa{background:#EDF7F0;color:var(--ok);border-color:#5CA97C}
+.gradeSim button.errada{background:#FAEFEE;color:var(--err);border-color:#DA9490}
+#cronSim{font-family:var(--serif);font-variant-numeric:tabular-nums;font-size:24px;font-weight:700}
+/* ---------- painel ---------- */
+.cardsMini{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.mini{background:var(--pan);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--sh);border-top:3px solid var(--ac,var(--brand))}
+.mini.a1{--ac:#0E5A6D}.mini.a2{--ac:#166534}.mini.a3{--ac:#A16207}.mini.a4{--ac:#155E75}
+.mini .rot{color:var(--mut);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.mini .gd{margin-top:2px}
+.barra{height:8px;background:var(--pan2);border-radius:99px;overflow:hidden;margin-top:4px}
+.barra i{display:block;height:100%;background:var(--bc,var(--brand));border-radius:99px}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);gap:3px;overflow-x:auto;padding-bottom:4px}
+.heat i{width:11px;height:11px;border-radius:3px;background:var(--pan2)}
+.heat i.h1{background:#BFD8DC}.heat i.h2{background:#6FA5AF}.heat i.h3{background:#2E7787}.heat i.h4{background:#0E5A6D}
+/* ---------- flashcards ---------- */
+.flash{min-height:230px;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;text-align:center;padding:20px}
+.flash .frente{font-family:var(--serif);font-size:19px;font-weight:600;max-width:620px;line-height:1.45}
+.flash .verso{font-size:14.5px;color:var(--ink);max-width:660px;white-space:pre-wrap;text-align:left;background:#F4F7F5;border:1px solid #DCE4DE;border-radius:9px;padding:13px 15px;line-height:1.6}
+/* ---------- imagens ---------- */
+#quadroImg{height:calc(100dvh - 175px);min-height:420px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#10151B;box-shadow:var(--sh)}
+#quadroImg iframe{width:100%;height:100%;border:0}
+/* ---------- lightbox ---------- */
+#luz{position:fixed;inset:0;z-index:90;background:rgba(16,21,27,.94);display:none;flex-direction:column}
+#luz.on{display:flex}
+#luz .fecha{position:absolute;top:10px;right:10px;z-index:2;background:#fff;border-radius:8px;padding:8px 12px;color:var(--ink)}
+#luz iframe{flex:1;border:0}
+/* ---------- erros ---------- */
+#tbErros input,#tbErros textarea{width:100%;border:none;background:transparent;padding:2px;font-size:13.5px;border-radius:4px}
+#tbErros textarea{resize:vertical;min-height:34px}
+#tbErros input:focus,#tbErros textarea:focus{background:var(--tinta);outline:1px solid var(--brand)}
+@media(max-width:600px){.topo{padding:12px 12px 6px}.topo h1{font-size:19px}.topo .sub{display:none}main{padding:14px 10px 64px}}
+/* ============================================================
+   23/09/2026, rt-v17: camada "viva", portada do ClínicaMed (cm-v97/v98), que o Matheus aprovou
+   ("melhorou muito") depois de reprovar o visual por "muito quadrado, tudo da mesma cor e pouco
+   dinâmico". Pedido: levar as mesmas mudanças aos outros apps de estudo RESPEITANDO A COR DE CADA UM
+   e "quando abrir a página, já ver a questão toda". Aqui a marca continua o azul-petróleo #0E5A6D
+   (identidade de 24/08, serif STIX nos títulos e números). Três eixos:
+   1. forma: cartões de 22 px com sombra suave, botões e filtros em pílula, letras e ícones em círculo;
+   2. cor: cada aba tem a sua (--ac em body[data-aba]), tons de janela de imagem: Questões e Painel no
+      petróleo da marca, Simulado âmbar, Imagens violeta, Cartões ciano, Erros magenta, Plano verde,
+      Ajustes ardósia. Acerto verde, erro vermelho. Texto branco só sobre fundo com 4.5:1 ou mais;
+   3. movimento: entrada escalonada ao trocar de aba, contadores, barras e anel que se preenchem,
+      questão que desliza na direção da navegação, acerto que pulsa, erro que treme, "N seguidas",
+      confete ao bater a meta do dia. Movimento reduzido respeitado no fim do bloco.
+   Questão inteira na tela (1512×763): cabeçalho numa linha só, filtro fino, cartão largo, alternativas
+   de ~46 px e, com imagem, imagem à esquerda e questão à direita. Sem gradiente e sem emoji.
+   EXCEÇÃO mantida: visor.html e o visor embutido (#quadroImg, #luz) continuam escuros e intocados.
+   ============================================================ */
+:root{
+  --c-petroleo:#0E5A6D; --c-ambar:#B45309; --c-violeta:#6D28D9; --c-ciano:#0369A1;
+  --c-magenta:#BE185D; --c-verde:#15803D; --c-ardosia:#475467;
+  --ac:var(--brand);
+  --acSup:color-mix(in srgb,var(--ac) 10%,#fff); --acInk:color-mix(in srgb,var(--ac) 82%,var(--ink));
+  --okSup:#E9F6EE; --errSup:#FBECEB;
+  --rG:22px;
+  --sombra:0 1px 2px rgba(32,36,43,.04),0 4px 14px rgba(32,36,43,.05);
+  --sombraM:0 10px 30px rgba(32,36,43,.10),0 2px 6px rgba(32,36,43,.05);
+  --mola:cubic-bezier(.34,1.56,.64,1);
+}
+body[data-aba="questoes"],body[data-aba="painel"]{--ac:var(--c-petroleo)}
+body[data-aba="simulado"]{--ac:var(--c-ambar)}
+body[data-aba="imagens"]{--ac:var(--c-violeta)}
+body[data-aba="cartoes"]{--ac:var(--c-ciano)}
+body[data-aba="erros"]{--ac:var(--c-magenta)}
+body[data-aba="plano"]{--ac:var(--c-verde)}
+body[data-aba="ajustes"]{--ac:var(--c-ardosia)}
+body[data-aba]{--acSup:color-mix(in srgb,var(--ac) 10%,#fff);--acInk:color-mix(in srgb,var(--ac) 82%,var(--ink))}
+
+/* ---------- cabeçalho e abas em pílula, cada aba com a sua cor ---------- */
+.topo .marca>svg{color:var(--c-petroleo)!important}
+nav{gap:4px;padding:6px 10px 8px}
+nav button{text-transform:none;letter-spacing:0;font-size:13.5px;font-weight:600;color:var(--mut);border:0;border-radius:999px;
+  padding:4px 13px 4px 4px;gap:8px;min-height:38px;transition:background .2s,color .2s}
+nav button svg.ic{width:30px;height:30px;padding:7px;border-radius:50%;stroke-width:2;
+  background:color-mix(in srgb,var(--c) 12%,transparent);color:var(--c);transition:transform .25s var(--mola),background .2s,color .2s}
+nav button:hover{background:#fff;color:var(--ink)}
+nav button:hover svg.ic{transform:scale(1.1) rotate(-6deg)}
+nav button.on{background:color-mix(in srgb,var(--c) 11%,#fff);color:color-mix(in srgb,var(--c) 80%,var(--ink));border:0}
+nav button.on svg.ic{background:var(--c);color:#fff;box-shadow:0 5px 12px color-mix(in srgb,var(--c) 35%,transparent)}
+@media(min-width:1180px){
+  header{display:flex;align-items:center;gap:22px;padding:9px max(24px,calc((100vw - 1240px)/2))}
+  .topo{margin:0;padding:0;max-width:none;flex:0 0 auto;align-items:center}
+  .topo .sub{display:none}
+  .regua{display:none}
+  nav{margin:0;padding:0;max-width:none;flex:1 1 auto;justify-content:flex-end}
+  main{max-width:1240px;padding:18px 24px 64px}
+}
+@media(min-width:900px) and (max-width:1179px){main{max-width:1080px}.topo,.regua,nav{max-width:1080px}}
+
+/* a questão entra deslizando 26 px: sem isto a página ganharia rolagem lateral durante a animação */
+main{overflow-x:clip}
+/* ---------- superfícies e controles ---------- */
+.cartao{border-radius:var(--rG);border:1px solid var(--line);box-shadow:var(--sombra);padding:20px 22px;margin-bottom:16px}
+.cartao h2{border-bottom:0;padding-bottom:0;margin-bottom:14px;display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.cartao h2::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ac);flex:none;box-shadow:0 0 0 4px var(--acSup)}
+.btn{border-radius:999px;padding:9px 20px;background:var(--ac);color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 26%,transparent);
+  transition:transform .15s var(--mola),box-shadow .2s,filter .2s,background .15s}
+.btn:hover{background:var(--ac);filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 10px 22px color-mix(in srgb,var(--ac) 32%,transparent)}
+.btn:active{transform:scale(.96)}
+.btn.fant{background:#fff;border:1px solid var(--linha2);color:#3E4A56;box-shadow:none}
+.btn.fant:hover{background:var(--pan2);filter:none}
+.btn.perigo{background:var(--err);box-shadow:0 6px 16px color-mix(in srgb,var(--err) 26%,transparent)}
+.btn.peq{min-height:32px;padding:4px 13px;font-size:12.5px}
+.btn[disabled]{box-shadow:none}
+input,select,textarea{border-radius:12px}
+select{border-radius:999px;padding:7px 14px}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 16%,transparent)}
+input[type=checkbox]{accent-color:var(--ac)}
+#tbErros input:focus,#tbErros textarea:focus{box-shadow:none;outline:1px solid var(--ac);background:var(--acSup)}
+.chip{border-radius:999px;padding:4px 11px}
+.barra{height:8px;background:#ECE8E0}
+.barra i{transition:width 1s cubic-bezier(.22,1,.36,1)}
+.faixa{border-radius:0}
+table{font-variant-numeric:tabular-nums}
+tr.clic{transition:background .15s}
+tr.clic:hover{background:var(--acSup)}
+
+/* ---------- questão ---------- */
+#sec-questoes>.cartao:first-child{border-radius:999px;padding:6px 8px 6px 10px;margin-bottom:12px}
+#sec-questoes>.cartao:first-child .linha{gap:8px}
+#sec-questoes>.cartao:first-child select{min-height:36px;padding:6px 14px;font-size:14px;background:var(--pan2);border-color:transparent}
+#sec-questoes>.cartao:first-child .mtt-btn{min-height:36px;padding:0 14px;font-size:14px;background:var(--pan2);border-color:transparent}
+#sec-questoes>.cartao:first-child .mtt-btn.mtt-ativo{border-color:var(--ac,var(--brand))}
+#sec-simulado .mtt-btn{min-width:min(240px,100%)}
+#sec-questoes>.cartao:first-child #fqEmbaralha{margin-left:auto;width:38px;min-height:38px;padding:0;justify-content:center}
+.qCard{padding:20px 28px 22px}
+.q-topo{margin-bottom:10px}
+.q-num{font-family:inherit;font-size:13px;color:var(--acInk);background:var(--acSup);padding:5px 13px;border-radius:999px}
+#qFav{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;transition:transform .2s var(--mola),background .2s}
+#qFav:hover{background:var(--pan2);transform:scale(1.08)}
+.q-enun{margin:6px 0 14px;line-height:1.62}
+.q-img{border-radius:18px;border:0}
+.q-img .lupa{border-radius:999px;padding:4px 12px}
+#qAlts,#simAlts{display:flex;flex-direction:column;gap:8px}
+.alt{border-radius:18px;border:1.5px solid var(--line);background:#fff;padding:7px 12px 7px 8px;margin-bottom:0;min-height:46px;align-items:center;
+  transition:transform .18s var(--mola),border-color .15s,background .15s,box-shadow .2s}
+.qCard>.alt,.qCard>div>.alt{margin-bottom:8px}
+.alt .letra{width:30px;height:30px;border:0;background:var(--pan2);font-family:inherit;font-weight:700;font-size:13px;color:#4A5563;
+  transition:background .2s,color .2s,transform .25s var(--mola)}
+.alt .txt{flex:1;min-width:0}
+.alt .risco{align-self:center;border-radius:50%;padding:5px;opacity:.35}
+.alt .risco:hover{background:var(--pan2)}
+#qAlts .alt:not(.certa):not(.errada):hover,#simAlts .alt:hover{border-color:var(--ac);background:var(--acSup);transform:translateX(3px);box-shadow:0 6px 18px color-mix(in srgb,var(--ac) 12%,transparent)}
+#qAlts .alt:not(.certa):not(.errada):hover .letra,#simAlts .alt:hover .letra{background:var(--ac);color:#fff}
+.alt.sel{border-color:var(--ac);background:var(--acSup);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 14%,transparent)}
+.alt.sel .letra{background:var(--ac);color:#fff}
+.alt.certa{border-color:var(--ok);background:var(--okSup)}
+.alt.errada{border-color:var(--err);background:var(--errSup)}
+.alt.certa .letra{background:var(--ok);color:#fff;font-size:0}
+.alt.certa .letra::before{content:"";width:12px;height:7px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:translateY(-2px) rotate(-45deg)}
+.alt.errada .letra{background:var(--err);color:#fff}
+#qAlts .alt.certa{animation:acerto .55s var(--mola)}
+#qAlts .alt.certa .letra::before{animation:marca .45s var(--mola) .1s both}
+#qAlts .alt.errada{animation:treme .45s}
+.coment{border-left:0;border-radius:20px;background:#F3F6F6;border:1px solid var(--line);padding:14px 18px;animation:desliza .4s ease both}
+.coment.ok{background:var(--okSup);border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+.coment.er{background:var(--errSup);border-color:color-mix(in srgb,var(--err) 28%,transparent)}
+.coment .porq{border-top-color:color-mix(in srgb,var(--ink) 10%,transparent)}
+.qCombo{display:inline-flex;align-items:center;gap:6px;margin-left:8px;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:700;
+  background:color-mix(in srgb,var(--c-ambar) 13%,#fff);color:#92400E;vertical-align:1px;animation:pop .45s var(--mola)}
+.qCombo svg{width:14px;height:14px}
+.navq{margin-top:14px}
+.qCard.entra{animation:entraQ .4s cubic-bezier(.22,1,.36,1) both}
+.qCard.entra.volta{animation-name:entraQv}
+/* com imagem, em tela larga: imagem à esquerda, questão à direita (tudo visível sem rolar) */
+@media(min-width:1100px){
+  .qCard.comImg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:26px;align-items:start}
+  .qCard.comImg>*{grid-column:2}
+  .qCard.comImg>.q-img{grid-column:1;grid-row:1/span 9;margin:0;position:sticky;top:86px}
+  .qCard.comImg>.q-img img{max-height:calc(100dvh - 190px)}
+}
+
+/* ---------- simulado: grade de questões na lateral em tela larga ---------- */
+.gradeSim{gap:6px}
+.gradeSim button{border-radius:999px;font-family:inherit;font-size:12.5px;transition:transform .15s var(--mola),background .15s}
+.gradeSim button:hover{transform:scale(1.08)}
+.gradeSim button.resp{background:var(--acSup);color:var(--acInk);border-color:color-mix(in srgb,var(--ac) 35%,transparent)}
+.gradeSim button.atual{outline:2px solid var(--ac)}
+.gradeSim button.certa{background:var(--okSup);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.gradeSim button.errada{background:var(--errSup);color:var(--err);border-color:color-mix(in srgb,var(--err) 45%,transparent)}
+#cronSim{color:var(--acInk);background:var(--acSup);padding:2px 14px;border-radius:999px;font-size:22px}
+@media(min-width:1100px){
+  #sec-simulado.on[data-modo="ativo"],#sec-simulado.on[data-modo="revisao"]{display:grid;grid-template-columns:minmax(0,1fr) 282px;column-gap:18px;align-items:start}
+  #sec-simulado[data-modo]>.cartao:first-child{grid-column:2;grid-row:1;position:sticky;top:78px;padding:16px}
+  #sec-simulado[data-modo]>.cartao:nth-child(2){grid-column:1;grid-row:1}
+  #sec-simulado[data-modo]>.cartao:first-child>.linha{flex-wrap:wrap;gap:10px}
+  #sec-simulado[data-modo]>.cartao:first-child .gradeSim{grid-template-columns:repeat(6,minmax(0,1fr));max-height:calc(100dvh - 250px);overflow-y:auto;padding:3px}
+  #sec-simulado[data-modo]>.cartao:first-child .gradeSim button{padding:6px 0}
+}
+
+/* ---------- cartões (flash) ---------- */
+.flash .verso{border-radius:18px;background:var(--acSup);border-color:color-mix(in srgb,var(--ac) 20%,transparent)}
+.flash .verso:not([hidden]){animation:vira .5s cubic-bezier(.22,1,.36,1) both;transform-origin:top}
+#fcNotas .btn[data-n="3"]{border-color:color-mix(in srgb,var(--c-ambar) 45%,transparent);color:#92400E}
+#fcNotas .btn[data-n="5"]{background:var(--ok);box-shadow:0 6px 16px color-mix(in srgb,var(--ok) 26%,transparent)}
+
+/* ---------- imagens: só os botões acima do visor (o visor segue escuro, intocado) ---------- */
+#sec-imagens>.linha .btn:not(.fant){background:var(--ac)}
+
+/* ---------- Painel: herói na cor da marca, anel, indicadores coloridos, atalhos ---------- */
+.vIni{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.vIni>*{min-width:0}
+.vHero{grid-column:span 8;position:relative;overflow:hidden;border-radius:28px;padding:28px 30px;background:var(--c-petroleo);color:#fff;
+  display:flex;gap:24px;align-items:center;box-shadow:0 18px 40px color-mix(in srgb,var(--c-petroleo) 28%,transparent)}
+.vHero .bola{position:absolute;border-radius:50%;background:#fff;opacity:.08;pointer-events:none}
+.vHero .b1{width:260px;height:260px;right:-70px;top:-90px;animation:flutua 9s ease-in-out infinite}
+.vHero .b2{width:130px;height:130px;right:170px;bottom:-60px;opacity:.06;animation:flutua 7s ease-in-out infinite reverse}
+.vHero .b3{width:46px;height:46px;left:46%;top:18px;opacity:.11;animation:flutua 6s ease-in-out infinite}
+.vHero .txt{flex:1;min-width:0;position:relative}
+.vHero small{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;background:rgba(255,255,255,.16);padding:5px 12px;border-radius:999px}
+.vHero h2{font-family:var(--serif);font-size:30px;line-height:1.15;margin:14px 0 8px;font-weight:700;letter-spacing:-.01em;color:#fff}
+.vHero p{margin:0 0 20px;opacity:.9;font-size:14.5px;max-width:52ch;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vHero .acoesH{display:flex;gap:10px;flex-wrap:wrap}
+.vHero .btn{background:#fff;color:var(--c-petroleo);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.vHero .btn:hover{background:#fff;filter:none}
+.vHero .btn.fant{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35);box-shadow:none}
+.vAnel{position:relative;width:150px;height:150px;flex:0 0 auto}
+.vAnel svg{transform:rotate(-90deg)}
+.vAnel .arco{transition:stroke-dashoffset 1.4s cubic-bezier(.22,1,.36,1)}
+.vAnel .val{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.vAnel .val b{font-family:var(--serif);font-size:38px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.vAnel .val span{font-size:12px;opacity:.88;margin-top:4px}
+.vMeta{grid-column:span 4;border-radius:28px;padding:22px 24px;background:var(--pan);border:1px solid var(--line);box-shadow:var(--sombra);display:flex;flex-direction:column}
+.vMeta h3{font-size:15px}
+.vMeta .sub{font-size:12.5px;color:var(--mut);margin-top:2px}
+.vSemana{display:flex;align-items:flex-end;gap:7px;height:118px;margin:auto 0 0;padding-top:16px}
+.vSemana div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.vSemana i{width:100%;border-radius:999px;background:#ECE8E0;min-height:8px;height:0;transition:height 1s cubic-bezier(.22,1,.36,1)}
+.vSemana i.com{background:color-mix(in srgb,var(--c-petroleo) 70%,#fff)}
+.vSemana i.hoje{background:var(--c-ambar)}
+.vSemana span{font-size:11px;color:var(--mut);font-weight:600}
+.vStats{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.vStat{--k:var(--c-petroleo);border-radius:24px;padding:16px 18px;background:color-mix(in srgb,var(--k) 9%,#fff);border:1px solid color-mix(in srgb,var(--k) 16%,transparent);
+  display:flex;gap:14px;align-items:center;text-align:left;color:var(--ink);transition:transform .2s var(--mola),box-shadow .2s}
+.vStat:hover{transform:translateY(-4px);box-shadow:0 12px 26px color-mix(in srgb,var(--k) 20%,transparent)}
+.vStat .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--k);color:#fff;flex:0 0 auto;box-shadow:0 8px 18px color-mix(in srgb,var(--k) 32%,transparent)}
+.vStat .ic svg{width:22px;height:22px}
+.vStat b{display:block;font-family:var(--serif);font-size:27px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;color:color-mix(in srgb,var(--k) 78%,var(--ink))}
+.vStat span span{font-size:12.5px;color:#55606C;font-weight:500}
+.vStat.fogo .ic svg{animation:chama 1.6s ease-in-out infinite;transform-origin:50% 90%}
+.vAtalhos{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap}
+.vAtalhos button{--k:var(--c-petroleo);display:inline-flex;align-items:center;gap:9px;border-radius:999px;padding:7px 16px 7px 7px;font-weight:600;font-size:13.5px;
+  background:color-mix(in srgb,var(--k) 11%,#fff);color:color-mix(in srgb,var(--k) 82%,var(--ink));transition:transform .2s var(--mola)}
+.vAtalhos button:hover{transform:translateY(-2px) scale(1.02)}
+.vAtalhos button i{width:30px;height:30px;border-radius:50%;background:var(--k);color:#fff;display:grid;place-items:center}
+.vAtalhos button i svg{width:16px;height:16px}
+.heat i{border-radius:50%;transition:transform .15s}
+.heat i:hover{transform:scale(1.4)}
+.heat i.h1{background:#BFD8DC}.heat i.h2{background:#6FA5AF}.heat i.h3{background:#2E7787}.heat i.h4{background:var(--c-petroleo)}
+
+/* ---------- movimento ---------- */
+.anima>*{animation:sobe .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 60ms)}
+@keyframes sobe{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes marca{0%{transform:translateY(-2px) rotate(-45deg) scale(.2);opacity:0}100%{transform:translateY(-2px) rotate(-45deg) scale(1);opacity:1}}
+@keyframes acerto{0%{transform:scale(1)}35%{transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes treme{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+@keyframes desliza{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes entraQ{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes entraQv{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes flutua{0%,100%{transform:translate(0,0)}50%{transform:translate(-14px,12px)}}
+@keyframes chama{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.12) rotate(-5deg)}60%{transform:scale(.96) rotate(4deg)}}
+@keyframes vira{from{opacity:0;transform:perspective(700px) rotateX(-70deg)}to{opacity:1;transform:none}}
+.confete{position:fixed;inset:0;pointer-events:none;z-index:200;width:100vw;height:100vh}
+
+/* ---------- responsivo ---------- */
+@media(max-width:1100px){.vHero,.vMeta{grid-column:1/-1}.vStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){
+  nav{padding:4px 6px 8px}
+  nav button{font-size:12.5px;padding:3px 11px 3px 3px;gap:6px;min-height:34px}
+  nav button svg.ic{width:28px;height:28px;padding:6px}
+  .cartao{padding:16px 14px;border-radius:20px}
+  #sec-questoes>.cartao:first-child{border-radius:20px;padding:8px}
+  #sec-questoes>.cartao:first-child select{flex:1 1 140px;min-width:0}
+  #sec-questoes>.cartao:first-child .mtt-btn{flex:1.6 1 140px;min-width:0}
+  .qCard{padding:16px 14px 18px}
+  .alt{padding:7px 8px 7px 7px;border-radius:16px;gap:9px}
+  .alt .risco{padding:3px}
+  .alt .letra{width:28px;height:28px}
+  #qAlts .alt:not(.certa):not(.errada):hover,#simAlts .alt:hover{transform:none}
+  .vIni{gap:12px}
+  .vHero{flex-direction:column-reverse;align-items:flex-start;padding:22px 20px;border-radius:24px;gap:14px}
+  .vHero h2{font-size:24px;margin-top:10px}
+  .vAnel{width:120px;height:120px;align-self:center}.vAnel svg{width:120px;height:120px}.vAnel .val b{font-size:30px}
+  .vHero .acoesH .btn{flex:1;white-space:nowrap;padding:9px 14px;justify-content:center}
+  .vSemana{height:78px;gap:5px}
+  .vMeta{padding:18px;border-radius:24px}
+  .vStats{gap:10px}.vStat{padding:12px;gap:10px;border-radius:20px}.vStat .ic{width:38px;height:38px}.vStat .ic svg{width:18px;height:18px}.vStat b{font-size:22px}
+  .vAtalhos button{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+  .anima>*,.vHero .bola,.vStat.fogo .ic svg,.qCard.entra,#qAlts .alt,#qAlts .alt .letra::before,.coment,.flash .verso,.qCombo{animation:none!important}
+  .vAnel .arco,.barra i,.vSemana i,.alt,.btn,nav button svg.ic,.vStat,.vAtalhos button{transition:none!important}
+}
+
+/* ---------- 24/09/2026, rt-v18: a questão inteira na tela do celular (PWA) ----------
+   Pedido do Matheus com print do iPhone (430x932, PWA): ao abrir, só se viam o enunciado e duas
+   alternativas. O que empurrava (medido em 430x840): cabeçalho de 98 px (marca, régua e abas em três
+   faixas), filtros em duas linhas (100 px), etiquetas em duas linhas (71 px) e alternativas de 84 px
+   (o texto usava 295 dos 380 px e quebrava em três linhas). Receita do TráfegoTítulo (tt-v16).
+   Com imagem: a imagem continua antes do enunciado e do mesmo tamanho (teto de 420 px); não foi
+   encolhida porque um teto menor deixaria as radiografias em retrato abaixo de 60% da largura. */
+@media(max-width:720px){
+  header{display:flex;align-items:center}
+  .topo{flex:none;margin:0;padding:0 2px 0 10px!important;max-width:none;align-items:center}
+  .topo h1{font-size:16.5px!important}
+  .topo .marca{gap:6px}.topo .marca>svg{width:20px!important;height:20px!important}
+  .topo .sub,.regua{display:none}
+  nav{flex:1 1 auto;min-width:0;margin:0;max-width:none;padding:5px 8px 5px 4px!important}
+  main{padding-top:6px!important;padding-left:8px!important;padding-right:8px!important}
+  #sec-questoes>.cartao:first-child{padding:6px 6px 6px 8px!important;margin-bottom:8px!important;border-radius:999px!important}
+  #sec-questoes>.cartao:first-child .linha{flex-wrap:nowrap!important;gap:6px!important}
+  #sec-questoes>.cartao:first-child .mtt-btn{flex:1.6 1 0!important;min-width:0;height:36px;min-height:36px!important;font-size:14px!important;padding:0 10px!important;gap:6px}
+  #sec-questoes>.cartao:first-child select{flex:1 1 0!important;min-width:0;height:36px;min-height:36px!important;font-size:14px!important;padding:0 10px!important}
+  #sec-questoes>.cartao:first-child label{white-space:nowrap;font-size:12.5px!important;flex:none}
+  #fqEmbaralha{width:36px!important;height:36px!important;min-height:36px!important;flex:none;margin-left:0!important}
+  .qCard{padding:11px 10px 12px!important}
+  .q-topo{flex-wrap:nowrap!important;gap:5px!important;margin-bottom:8px!important;min-width:0}
+  .q-topo .chip{display:block;min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px!important;padding:3px 9px!important}
+  .q-topo .chip.real,.q-topo .chip.aut{flex:none}
+  .q-topo .q-num{flex:none;font-size:12px;padding:4px 10px}
+  #qFav{width:32px!important;height:32px!important;flex:none}
+  .q-enun{margin:4px 0 10px!important;line-height:1.55!important}
+  .q-img{margin-bottom:10px!important}
+  #qAlts,#simAlts{gap:6px!important}
+  .alt{padding:5px 6px!important;gap:9px!important;min-height:44px!important;font-size:14.5px!important;line-height:1.42!important}
+  .alt .txt{padding:2px 0}
+  .alt .letra{width:27px!important;height:27px!important;font-size:12.5px!important}
+  .alt.certa .letra{font-size:0!important}
+  .alt .risco{padding:2px!important;margin-left:0!important}
+  .alt .risco svg{width:13px!important;height:13px!important}
+  .navq{margin-top:12px}
+}
+/* bandeira de sinalizar erro (mtsinal.js) — mesmo tamanho da estrela de favorita */
+.q-topo .msn-btn{width:40px;height:40px;min-width:40px;min-height:40px;padding:0;border-radius:50%}
+@media(max-width:720px){.q-topo .msn-btn{width:32px;height:32px;min-width:32px;min-height:32px}}
+</style>
+</head>
+<body>
+<div id="faixas"></div>
+<header>
+  <div class="topo">
+    <span class="marca">
+      <svg class="ic" viewBox="0 0 24 24" style="width:23px;height:23px;color:var(--brand)"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg>
+      <h1>Radio<em>Título</em></h1>
+    </span>
+    <div class="sub" id="subTopo">prova de título CBR/AMB</div>
+  </div>
+  <div class="regua"><i></i></div>
+  <nav id="abas"></nav>
+</header>
+<main>
+  <section id="sec-questoes"></section>
+  <section id="sec-simulado"></section>
+  <section id="sec-imagens">
+    <div class="linha" style="margin-bottom:10px">
+      <button class="btn" id="btGaleria">Banco de casos</button>
+      <button class="btn fant" id="btTreino">Olho treinado</button>
+    </div>
+    <div id="quadroImg"></div>
+  </section>
+  <section id="sec-painel"></section>
+  <section id="sec-cartoes"></section>
+  <section id="sec-erros"></section>
+  <section id="sec-plano"></section>
+  <section id="sec-ajustes"></section>
+</main>
+<div id="luz"><button class="fecha" id="luzFecha">Fechar ✕</button><iframe id="luzFrame" title="Visor de imagem"></iframe></div>
+
+<script src="mtfiltro.js"></script>
+<script src="mtsinal.js"></script>
+<script src="taxonomia.js"></script>
+<script src="banco.js"></script>
+<script src="flash.js"></script>
+<script src="casos.js"></script>
+<script>
+"use strict";
+/* ================== RadioTítulo v1 ================== */
+const V="1.0.0";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dataISO=(d=new Date())=>{const p=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
+const addDiasISO=(iso,n)=>{const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+n);return dataISO(d)};
+const novoIdLinha=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const LETRAS="ABCDE";
+
+/* ---------- 2.1 chave estável por conteúdo (djb2+FNV, Math.imul) ---------- */
+function hashTxt(s){
+  let h1=5381, h2=0x811c9dc5;
+  for(let i=0;i<s.length;i++){
+    const c=s.charCodeAt(i);
+    h1=((h1<<5)+h1+c)>>>0;
+    h2=Math.imul(h2^c, 0x01000193)>>>0;
+  }
+  return (h1.toString(36)+h2.toString(36)).slice(0,10);
+}
+function chaveTxt(t){
+  t=String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+  return hashTxt(t);
+}
+function chaveQ(q){ return chaveTxt(q.q); }
+
+const BANCO=window.BANCO||[], TAXONOMIA=window.TAXONOMIA||[], FLASH=window.FLASH||[], CASOS=window.CASOS||[];
+const QIDX=new Map(); BANCO.forEach(q=>{const ch=chaveQ(q); if(QIDX.has(ch))console.warn("COLISÃO de chave:",ch,q.q.slice(0,60)); QIDX.set(ch,q); q._ch=ch;});
+const TNOME=Object.fromEntries(TAXONOMIA.map(t=>[t.id,t.nome]));
+const TCOR=Object.fromEntries(TAXONOMIA.map(t=>[t.id,t.cor||{}]));
+const chipTema=id=>`<span class="chip tema" style="--tf:${(TCOR[id]||{}).f||"#EEE"};--tt:${(TCOR[id]||{}).t||"#555"}">${esc(TNOME[id]||id)}</span>`;
+
+/* ---------- UI: faixas de aviso ---------- */
+const UI={
+  banner(tipo,msg,fixa){
+    const d=document.createElement("div");d.className="faixa "+tipo;
+    d.innerHTML=`<span>${esc(msg)}</span><button aria-label="fechar">✕</button>`;
+    d.querySelector("button").onclick=()=>d.remove();
+    $("#faixas").appendChild(d);
+    if(!fixa)setTimeout(()=>d.remove(),12000);
+  }
+};
+
+/* ---------- 2.2 blindagem de armazenamento ---------- */
+// PREF e a UNICA fonte do prefixo: RTKEYS deriva dele e listaBackups/restaura filtram por ele.
+// Nao escrever o prefixo literal: ao copiar este ARM para o TrafegoTitulo o "rt_" fixo veio junto
+// e la a lista de backups dizia 0 chaves e restaurar nao devolvia nada, em silencio.
+const PREF="rt_";
+const RTKEYS=["resp","riscos","fav","flash","erros","plano","meta","cfg","sim","simativo","pos","treino","atividade","sinal","syncmeta"].map(s=>PREF+s);
+const ARM={
+  db:null, travas:{}, persistOK:null, tsBackup:0, recuperado:null,
+  async boot(){
+    // timeout de segurança: IDB preso (aba antiga/modo privado) não pode travar o boot
+    this.db=await Promise.race([new Promise(res=>setTimeout(()=>res(null),2500)),new Promise(res=>{
+      try{
+        const rq=indexedDB.open("rt-db",1);
+        rq.onupgradeneeded=()=>{const d=rq.result;
+          if(!d.objectStoreNames.contains("espelho"))d.createObjectStore("espelho");
+          if(!d.objectStoreNames.contains("backups"))d.createObjectStore("backups",{autoIncrement:true});
+        };
+        rq.onsuccess=()=>res(rq.result); rq.onerror=()=>res(null); rq.onblocked=()=>res(null);
+      }catch(e){res(null)}
+    })]);
+    // recuperação: canário sumiu do localStorage mas o espelho IDB tem dados?
+    let canario=null; try{canario=localStorage.getItem("rt_canary")}catch(e){}
+    if(!canario&&this.db){
+      const esp=await this.idbTudo("espelho");
+      const chaves=Object.keys(esp).filter(k=>RTKEYS.includes(k));
+      if(chaves.length){
+        chaves.forEach(k=>{try{localStorage.setItem(k,esp[k])}catch(e){}});
+        this.recuperado={n:chaves.length,quando:esp.__quando||"data desconhecida"};
+      }
+    }
+    try{localStorage.setItem("rt_canary",new Date().toISOString())}catch(e){}
+    this.idbPut("__quando",new Date().toISOString());
+    if(navigator.storage&&navigator.storage.persist){
+      try{this.persistOK=await navigator.storage.persist()}catch(e){this.persistOK=false}
+    }
+  },
+  idbPut(k,v){ if(!this.db)return;
+    try{this.db.transaction("espelho","readwrite").objectStore("espelho").put(v,k)}catch(e){} },
+  idbTudo(loja){ return new Promise(res=>{ if(!this.db)return res({});
+    try{const out={},cur=this.db.transaction(loja,"readonly").objectStore(loja).openCursor();
+      cur.onsuccess=()=>{const c=cur.result;if(c){out[c.key]=c.value;c.continue()}else res(out)};
+      cur.onerror=()=>res({});
+    }catch(e){res({})} }) },
+  load(k,fb){
+    let raw=null, falhou=false;
+    try{raw=localStorage.getItem(k)}catch(e){falhou=true;this.travas[k]="leitura falhou: "+e.message}
+    if(raw===null&&!falhou)return fb;          // nunca gravada: fallback é seguro
+    if(!falhou){ try{return JSON.parse(raw)}catch(e){this.travas[k]="JSON corrompido"} }
+    UI.banner("erro",`Falha ao ler ${k} neste aparelho. Para não apagar nada, essa parte não será gravada até reabrir o app; o que já está na sua conta continua salvo.`,true);
+    return fb;
+  },
+  save(k,v){
+    if(this.travas[k]){UI.banner("erro",`Não gravei ${k}: a leitura falhou neste boot (proteção contra sobrescrita).`);return false}
+    let s; try{s=JSON.stringify(v)}catch(e){return false}
+    try{localStorage.setItem(k,s)}catch(e){UI.banner("erro","Armazenamento cheio/indisponível: "+e.message,true);return false}
+    this.idbPut(k,s);
+    try{window.RTSYNC&&RTSYNC.aoSalvar(k)}catch(e){}
+    const ag=Date.now();
+    if(ag-this.tsBackup>10*60*1000){this.tsBackup=ag;this.snapshot("auto")}
+    return true;
+  },
+  snapshot(motivo){ return new Promise(res=>{ if(!this.db)return res(false);
+    const foto={__quando:new Date().toISOString(),__motivo:motivo||"manual"};
+    RTKEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)foto[k]=v}catch(e){}});
+    try{
+      const tx=this.db.transaction("backups","readwrite"),st=tx.objectStore("backups");
+      st.add(foto);
+      const rq=st.getAllKeys();
+      rq.onsuccess=()=>{const ks=rq.result;
+        if(ks.length>12){const tx2=this.db.transaction("backups","readwrite");
+          ks.slice(0,ks.length-12).forEach(k=>tx2.objectStore("backups").delete(k))}
+        res(true)};
+      rq.onerror=()=>res(false);
+    }catch(e){res(false)} }) },
+  listaBackups(){ return new Promise(res=>{ if(!this.db)return res([]);
+    try{const out=[],cur=this.db.transaction("backups","readonly").objectStore("backups").openCursor();
+      cur.onsuccess=()=>{const c=cur.result;
+        if(c){out.push({id:c.key,quando:c.value.__quando,motivo:c.value.__motivo,
+          n:Object.keys(c.value).filter(k=>k.startsWith(PREF)).length});c.continue()}
+        else res(out.reverse())};
+      cur.onerror=()=>res([]);
+    }catch(e){res([])} }) },
+  restaura(id){ return new Promise(res=>{ if(!this.db)return res(false);
+    try{const rq=this.db.transaction("backups","readonly").objectStore("backups").get(id);
+      rq.onsuccess=async()=>{const foto=rq.result;if(!foto)return res(false);
+        await this.snapshot("antes-de-restaurar");
+        Object.keys(foto).filter(k=>k.startsWith(PREF)).forEach(k=>{try{localStorage.setItem(k,foto[k])}catch(e){}});
+        res(true)};
+      rq.onerror=()=>res(false);
+    }catch(e){res(false)} }) },
+  exporta(){ const out={__app:"radio-titulo",__v:V,__quando:new Date().toISOString()};
+    RTKEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!==null)out[k]=v}catch(e){}});
+    return out },
+  async importa(obj){ if(!obj||obj.__app!=="radio-titulo")return null;
+    await this.snapshot("antes-de-importar");
+    let n=0;
+    RTKEYS.forEach(k=>{ if(typeof obj[k]==="string"){
+      try{JSON.parse(obj[k])}catch(e){return}
+      try{localStorage.setItem(k,obj[k]);this.idbPut(k,obj[k]);n++}catch(e){} }});
+    return n }
+};
+
+/* ---------- estado ---------- */
+let ST={};
+function carregaEstado(){
+  ST={
+    resp:ARM.load("rt_resp",{}), riscos:ARM.load("rt_riscos",{}), fav:ARM.load("rt_fav",{}), sinal:ARM.load("rt_sinal",{}),
+    flash:ARM.load("rt_flash",{}), erros:ARM.load("rt_erros",[]), plano:ARM.load("rt_plano",[]),
+    meta:ARM.load("rt_meta",{}), cfg:ARM.load("rt_cfg",{}), sim:ARM.load("rt_sim",[]),
+    simativo:ARM.load("rt_simativo",null), pos:ARM.load("rt_pos",{}), treino:ARM.load("rt_treino",{}),
+    atividade:ARM.load("rt_atividade",{})
+  };
+}
+function atividade(n){const d=dataISO();ST.atividade[d]=(ST.atividade[d]||0)+n;ARM.save("rt_atividade",ST.atividade)}
+function registraResposta(q,alt,ok,modo){
+  const ch=q._ch, r=ST.resp[ch]||(ST.resp[ch]={hist:[]});
+  r.hist.push({d:dataISO(),ok,alt,m:modo,ts:Date.now()});
+  if(r.hist.length>60)r.hist=r.hist.slice(-60);
+  ARM.save("rt_resp",ST.resp); atividade(1);
+}
+const respostaDe=q=>ST.resp[q._ch];
+const taxaAcerto=hist=>hist.length?hist.filter(h=>h.ok).length/hist.length:null;
+
+/* ---------- abas ---------- */
+const ABAS=[
+  ["questoes","Questões",'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'],
+  ["simulado","Simulado",'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>'],
+  ["imagens","Imagens",'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'],
+  ["painel","Painel",'<path d="M3 3v18h18M7 14v4M12 10v8M17 6v12"/>'],
+  ["cartoes","Cartões",'<rect x="2" y="6" width="16" height="12" rx="2"/><path d="M22 4v12M6 10h8M6 14h5"/>'],
+  ["erros","Erros",'<path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>'],
+  ["plano","Plano",'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'],
+  ["ajustes","Ajustes",'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>']
+];
+let abaAtual="";
+/* 23/09/2026 (camada viva): cada aba tem a sua cor; a marca (petróleo) fica em Questões e Painel */
+const COR_ABA={questoes:"var(--c-petroleo)",simulado:"var(--c-ambar)",imagens:"var(--c-violeta)",painel:"var(--c-petroleo)",
+  cartoes:"var(--c-ciano)",erros:"var(--c-magenta)",plano:"var(--c-verde)",ajustes:"var(--c-ardosia)"};
+function montaAbas(){
+  $("#abas").innerHTML=ABAS.map(([id,nome,ic])=>
+    `<button data-aba="${id}" style="--c:${COR_ABA[id]||"var(--brand)"}"><svg class="ic" viewBox="0 0 24 24">${ic}</svg>${nome}</button>`).join("");
+  $("#abas").querySelectorAll("button").forEach(b=>b.onclick=()=>irAba(b.dataset.aba));
+}
+function irAba(id,semHash){
+  abaAtual=id;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.aba===id));
+  const bOn=document.querySelector(`nav button[data-aba="${id}"]`);   // celular: a aba ativa sempre à vista
+  const nv=bOn&&bOn.parentElement;
+  if(nv&&nv.scrollWidth>nv.clientWidth){const rb=bOn.getBoundingClientRect(),rn=nv.getBoundingClientRect();
+    nv.scrollTo({left:nv.scrollLeft+rb.left-rn.left-rn.width/2+rb.width/2,behavior:REDUZ()||document.hidden?"auto":"smooth"})}
+  document.querySelectorAll("main section").forEach(s=>s.classList.toggle("on",s.id==="sec-"+id));
+  if(!semHash&&location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+  ST.pos.aba=id;ARM.save("rt_pos",ST.pos);
+  document.body.dataset.aba=id;
+  const r=({questoes:montaQuestoes,simulado:montaSimulado,imagens:montaImagens,painel:montaPainel,
+    cartoes:montaCartoes,erros:montaErros,plano:montaPlano,ajustes:montaAjustes}[id]||(()=>{}))();
+  const sec=$("#sec-"+id);
+  if(r&&r.then)r.then(()=>{if(abaAtual===id)vivo(sec)});else vivo(sec);
+}
+
+/* ---------- camada viva (23/09/2026): movimento sem tocar em dado nenhum ---------- */
+let COMBO=0;
+const REDUZ=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
+function vivo(sec){
+  if(!sec)return;
+  [sec,...sec.querySelectorAll(".vIni")].forEach(alvo=>{
+    alvo.classList.remove("anima");void alvo.offsetWidth;alvo.classList.add("anima");
+    [...alvo.children].forEach((c,k)=>c.style.setProperty("--i",Math.min(k,12)));
+  });
+  if(REDUZ())return;
+  // contadores: o número final já está no HTML; só anima se a página estiver visível
+  if(document.visibilityState==="visible")sec.querySelectorAll("[data-conta]").forEach(el=>{
+    const fim=+el.dataset.conta, suf=el.dataset.suf||"";
+    if(!fim)return;
+    const t0=performance.now(),d=900;
+    const passo=t=>{const p=Math.min(1,(t-t0)/d),e=1-Math.pow(1-p,3);el.textContent=Math.round(fim*e)+suf;if(p<1)requestAnimationFrame(passo)};
+    el.textContent="0"+suf;requestAnimationFrame(passo);
+  });
+  // barras, colunas e anel: parte do zero e cresce até o valor que já estava no HTML
+  const cresce=(els,prop,zero)=>els.forEach(el=>{const alvo=el.style[prop];if(!alvo)return;el.style.transition="none";el.style[prop]=zero;void el.offsetWidth;el.style.transition="";el.style[prop]=alvo});
+  cresce(sec.querySelectorAll(".barra i"),"width","0");
+  cresce(sec.querySelectorAll(".vSemana i"),"height","8px");
+  sec.querySelectorAll(".vAnel .arco").forEach(el=>{const alvo=el.style.strokeDashoffset,c=el.getAttribute("stroke-dasharray");el.style.transition="none";el.style.strokeDashoffset=c;void el.getBoundingClientRect();el.style.transition="";el.style.strokeDashoffset=alvo});
+}
+/* questão desliza na direção da navegação (volta = anterior) */
+function entra(el,volta){
+  if(!el||REDUZ())return;
+  el.classList.remove("entra","volta");void el.offsetWidth;el.classList.add("entra");if(volta)el.classList.add("volta");
+}
+/* confete leve em canvas: 1,6 s, some sozinho; nada se movimento reduzido */
+function confete(){
+  if(REDUZ())return;
+  const cv=document.createElement("canvas");cv.className="confete";document.body.appendChild(cv);
+  const dpr=devicePixelRatio||1,W=cv.width=innerWidth*dpr,H=cv.height=innerHeight*dpr,x=cv.getContext("2d");
+  const cores=["#0E5A6D","#B45309","#6D28D9","#0369A1","#BE185D","#15803D","#F59E0B","#14B8A6"];
+  const ps=[...Array(130)].map(()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*26*dpr,vy:(-Math.random()*22-6)*dpr,
+    s:(6+Math.random()*7)*dpr,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cores[Math.random()*cores.length|0],f:Math.random()<.5}));
+  const t0=performance.now();
+  const q=t=>{const el=t-t0;x.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.vy+=.9*dpr;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.globalAlpha=Math.max(0,1-el/1600);x.fillStyle=p.c;
+      if(p.f)x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);else{x.beginPath();x.arc(0,0,p.s/3,0,7);x.fill()}x.restore()});
+    if(el<1600)requestAnimationFrame(q);else cv.remove()};
+  requestAnimationFrame(q);
+  setTimeout(()=>cv.remove(),2500);
+}
+/* meta do dia = o "~N/dia" que o Painel já mostra (alvo e data da prova), congelado no início do dia
+   para não andar enquanto se responde. Sem data/alvo definidos, não há meta do dia. */
+function respostasHoje(){const hj=dataISO();let n=0;for(const r of Object.values(ST.resp))for(const h of r.hist)if(h.d===hj)n++;return n}
+function metaDoDia(){
+  const m=ST.meta||{};if(!m.dataProva||!m.alvo)return null;
+  const dias=Math.ceil((new Date(m.dataProva+"T12:00:00")-new Date())/86400000);if(dias<=0)return null;
+  const total=Object.values(ST.resp).reduce((a,r)=>a+r.hist.length,0),hoje=respostasHoje();
+  const faltam=Math.max(0,m.alvo-(total-hoje));if(!faltam)return null;
+  return {meta:Math.ceil(faltam/dias),hoje};
+}
+addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(ABAS.some(a=>a[0]===h))irAba(h,true)});
+
+/* ---------- ordem das questões ----------
+   Portado do TráfegoTítulo (25/08/2026), que é fork daqui e onde o defeito foi
+   diagnosticado. São DOIS defeitos somados:
+   1) o banco é montado leva a leva e cada leva é temática — na ordem crua havia até
+      17 questões seguidas do mesmo tema (505 dos 654 pares adjacentes iguais);
+   2) `sort(()=>Math.random()-0.5)` NÃO embaralha: o comparador é inconsistente e o
+      TimSort do V8 deixa o começo do vetor sobrerrepresentado (+18%/-20% medido).
+      Isso enviesava sobretudo o SORTEIO DO SIMULADO, que puxava para os temas das
+      primeiras levas. */
+
+/* Fisher-Yates — permutação uniforme, no lugar */
+function embaralha(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* Espalha os temas: a cada passo sorteia o próximo tema PONDERADO pelo que resta,
+   proibindo repetir o tema anterior. Só repete quando é matematicamente inevitável
+   (um tema com mais da metade do que sobrou). Dentro do tema, a ordem é aleatória. */
+function espalhaTemas(lista){
+  const grupos=new Map();
+  lista.forEach(q=>{
+    const k=q.tema||"_";
+    if(!grupos.has(k))grupos.set(k,[]);
+    grupos.get(k).push(q);
+  });
+  grupos.forEach(v=>embaralha(v));
+  const out=[]; let anterior=null;
+  while(out.length<lista.length){
+    /* NÃO trocar por "pega sempre o tema com mais restantes": a versão determinística
+       degenera em pingue-pongue entre os dois temas mais numerosos (só 3 temas
+       distintos nas 20 primeiras). O sorteio ponderado é o que dá variedade. */
+    const cand=[]; let peso=0;
+    grupos.forEach((v,k)=>{ if(v.length&&k!==anterior){cand.push([k,v.length]);peso+=v.length} });
+    let escolhido=null;
+    if(cand.length){
+      let r=Math.random()*peso;
+      for(const [k,n] of cand){ r-=n; if(r<=0){escolhido=k;break} }
+      if(escolhido===null)escolhido=cand[cand.length-1][0];
+    }else{
+      grupos.forEach((v,k)=>{ if(v.length)escolhido=k });   // só sobrou o anterior
+    }
+    out.push(grupos.get(escolhido).pop());
+    anterior=escolhido;
+  }
+  return out;
+}
+
+/* assinatura do filtro: muda o filtro, refaz a ordem */
+function assinaturaQ(f,n){return [f.temas.slice().sort().join(","),f.status,f.real?1:0,n].join("|")}
+
+/* sinalizar questão com erro (mtsinal.js): fica na lista da conta (sincroniza) e vai para a caixa central da
+   administração (função mtSinal; medtechbr.com.br/sinalizacoes.html) */
+let SINAL=null;
+function sinalizador(){
+  if(!SINAL&&window.MTSinal)SINAL=MTSinal.cria({app:"RadioTítulo",exemplo:"Ex.: o achado descrito é de outro diagnóstico; a correta seria a C",le:()=>ST.sinal||{},
+    grava:o=>{ST.sinal=o;ARM.save("rt_sinal",ST.sinal)},
+    central:{app:"radio-titulo",token:()=>window.MTS&&MTS.usuario?MTS.usuario.getIdToken():null}});
+  return SINAL;
+}
+function abreQuestaoSinal(ch){ST.pos.fq={temas:[],status:"todas",real:false};ST.pos.chq=ch;ARM.save("rt_pos",ST.pos);irAba("questoes");window.scrollTo(0,0)}
+/* opções do seletor de vários temas (mtfiltro.js) */
+function opcoesTemas(){
+  const n={};BANCO.forEach(q=>n[q.tema]=(n[q.tema]||0)+1);
+  return TAXONOMIA.map(t=>({id:t.id,nome:t.nome,n:n[t.id]||0}));
+}
+
+/* ================== QUESTÕES ================== */
+const QST={lista:[],idx:0,respondida:false,selecionada:null};
+function filtrosQ(){
+  const f=ST.pos.fq||{};
+  /* temas: lista (vazia = todos). Estado antigo gravava um tema só em "tema". */
+  return {temas:MTTemas.lista(f.temas!=null?f.temas:f.tema),status:f.status||"todas",real:!!f.real};
+}
+function passaFiltroQ(q,f){
+  if(f.temas.length&&!f.temas.includes(q.tema))return false;
+  if(f.real&&!q.fonte)return false;
+  const r=respostaDe(q);
+  if(f.status==="nao"&&r)return false;
+  if(f.status==="erradas"&&!(r&&r.hist.length&&!r.hist[r.hist.length-1].ok))return false;
+  if(f.status==="favoritas"&&!ST.fav[q._ch])return false;
+  if(f.status==="sinal"&&!(ST.sinal||{})[q._ch])return false;
+  return true;
+}
+function aplicaFiltroQ(refazOrdem){
+  const f=filtrosQ();
+  QST.lista=BANCO.filter(q=>passaFiltroQ(q,f));
+  ordenaQuestoes(f,refazOrdem);
+}
+
+/* Mantém a MESMA ordem enquanto o filtro não muda (navegar e recarregar não
+   reembaralham), mas com os temas espalhados desde a primeira abertura. */
+function ordenaQuestoes(f,refazOrdem){
+  const ass=assinaturaQ(f,QST.lista.length);
+  const salva=ST.pos.ordq;
+  if(!refazOrdem&&ST.pos.assq===ass&&Array.isArray(salva)){
+    const porCh=new Map(QST.lista.map(q=>[q._ch,q]));
+    const ord=[];
+    salva.forEach(ch=>{const q=porCh.get(ch);if(q){ord.push(q);porCh.delete(ch)}});
+    if(porCh.size)espalhaTemas([...porCh.values()]).forEach(q=>ord.push(q)); // questões novas do banco
+    if(ord.length===QST.lista.length){QST.lista=ord;return}
+  }
+  QST.lista=espalhaTemas(QST.lista);
+  ST.pos.assq=ass;
+  ST.pos.ordq=QST.lista.map(q=>q._ch);
+  ARM.save("rt_pos",ST.pos);
+}
+function montaQuestoes(){
+  const f=filtrosQ();
+  const sec=$("#sec-questoes");
+  sec.innerHTML=`
+  <div class="cartao">
+    <div class="linha">
+      <span id="fqTema"></span>
+      <select id="fqStatus">
+        <option value="todas" ${f.status==="todas"?"selected":""}>Todas</option>
+        <option value="nao" ${f.status==="nao"?"selected":""}>Não respondidas</option>
+        <option value="erradas" ${f.status==="erradas"?"selected":""}>Que errei</option>
+        <option value="favoritas" ${f.status==="favoritas"?"selected":""}>Favoritas</option>
+        <option value="sinal" ${f.status==="sinal"?"selected":""}>Sinalizadas</option>
+      </select>
+      <label class="linha peq mut" style="gap:5px"><input type="checkbox" id="fqReal" ${f.real?"checked":""}> só prova real</label>
+      <button class="btn fant" id="fqEmbaralha" title="Reembaralhar (temas espalhados)" aria-label="Reembaralhar as questões"><svg class="ic" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></button>
+    </div>
+  </div>
+  <div id="qCorpo"></div>`;
+  MTTemas.monta($("#fqTema"),{opcoes:opcoesTemas(),selecionados:f.temas,titulo:"Temas",
+    conta:ids=>{const g={...filtrosQ(),temas:ids};return BANCO.reduce((n,q)=>n+(passaFiltroQ(q,g)?1:0),0)},
+    aoMudar:ids=>{ST.pos.fq={...filtrosQ(),temas:ids};ST.pos.chq=null;ARM.save("rt_pos",ST.pos);QST.idx=0;montaQuestoes()}});
+  $("#fqStatus").onchange=e=>{ST.pos.fq={...filtrosQ(),status:e.target.value};ARM.save("rt_pos",ST.pos);QST.idx=0;montaQuestoes()};
+  $("#fqReal").onchange=e=>{ST.pos.fq={...filtrosQ(),real:e.target.checked};ARM.save("rt_pos",ST.pos);QST.idx=0;montaQuestoes()};
+  $("#fqEmbaralha").onclick=()=>{aplicaFiltroQ(true);QST.idx=0;ST.pos.chq=null;ARM.save("rt_pos",ST.pos);desenhaQuestao()};
+  aplicaFiltroQ();
+  // continuar de onde parei — por CHAVE, nunca por índice
+  if(ST.pos.chq){const i=QST.lista.findIndex(q=>q._ch===ST.pos.chq);if(i>=0)QST.idx=i}
+  if(QST.idx>=QST.lista.length)QST.idx=0;
+  desenhaQuestao();
+}
+function desenhaQuestao(){
+  const box=$("#qCorpo");
+  if(!QST.lista.length){box.innerHTML=`<div class="cartao mut">Nenhuma questão com esses filtros.</div>`;return}
+  const q=QST.lista[QST.idx];
+  QST.respondida=false;QST.selecionada=null;
+  ST.pos.chq=q._ch;ARM.save("rt_pos",ST.pos);
+  const riscos=ST.riscos[q._ch]||[];
+  const selo=q.fonte?`<span class="chip real">${esc(q.fonte.banca)} ${esc(q.fonte.ano)}</span>`:`<span class="chip aut">autoral</span>`;
+  box.innerHTML=`<div class="cartao qCard${q.img?" comImg":""}">
+    <div class="q-topo">
+      ${chipTema(q.tema)}${q.sub?`<span class="chip">${esc(q.sub)}</span>`:""}${selo}
+      <span class="q-num">${QST.idx+1} / ${QST.lista.length}</span>
+      <span id="qSinal"></span><button id="qFav" title="Favoritar" style="color:${ST.fav[q._ch]?"var(--warn)":"var(--mut)"}">
+        <svg class="ic" viewBox="0 0 24 24" ${ST.fav[q._ch]?'fill="currentColor"':""}><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+    </div>
+    ${q.img?`<figure class="q-img" id="qImg"><img src="${esc(q.img)}" alt="${esc(q.imgAlt||"imagem da questão")}"><span class="lupa">abrir no visor</span></figure>`:""}
+    <div class="q-enun">${esc(q.q)}</div>
+    <div id="qAlts">${q.alts.map((a,i)=>`
+      <button class="alt ${riscos.includes(i)?"riscada":""}" data-i="${i}">
+        <span class="letra">${LETRAS[i]}</span><span class="txt">${esc(a)}</span>
+        <span class="risco" title="Riscar alternativa"><svg viewBox="0 0 24 24" class="ic"><path d="M4 12h16M9 5l6 14"/></svg></span>
+      </button>`).join("")}</div>
+    <div class="navq">
+      <button class="btn fant" id="qAnt">‹ Anterior</button>
+      <button class="btn" id="qResp" disabled>Responder</button>
+      <button class="btn fant" id="qProx" style="margin-left:auto">Próxima ›</button>
+    </div>
+    <div id="qFeed"></div>
+  </div>`;
+  if(q.img)$("#qImg").onclick=()=>abreLuz(`visor.html?img=${encodeURIComponent(q.img)}&alt=${encodeURIComponent(q.imgAlt||"")}`);
+  $("#qFav").onclick=()=>{if(ST.fav[q._ch])delete ST.fav[q._ch];else ST.fav[q._ch]=1;ARM.save("rt_fav",ST.fav);desenhaQuestao()};
+  { const S=sinalizador(); if(S)S.botao($("#qSinal"),{chave:q._ch,q:q.q,tema:TNOME[q.tema]||q.tema,extra:"gabarito "+LETRAS[q.gab]}); }
+  $("#qAnt").onclick=()=>{if(QST.idx>0){QST.idx--;QST.volta=true;desenhaQuestao()}};
+  $("#qProx").onclick=()=>{if(QST.idx<QST.lista.length-1){QST.idx++;desenhaQuestao()}};
+  entra(box.querySelector(".qCard"),QST.volta);QST.volta=false;
+  $("#qResp").onclick=()=>respondeQuestao(q);
+  box.querySelectorAll(".alt").forEach(el=>ligaAlternativa(el,q));
+}
+function ligaAlternativa(el,q){
+  const i=+el.dataset.i;
+  el.querySelector(".risco").onclick=e=>{e.stopPropagation();toggleRisco(q,i)};
+  // arrastar para o lado risca (toque e mouse); clique seleciona
+  let x0=null,y0=null,arrastou=false;
+  el.addEventListener("pointerdown",e=>{x0=e.clientX;y0=e.clientY;arrastou=false});
+  el.addEventListener("pointermove",e=>{
+    if(x0===null||QST.respondida)return;
+    if(Math.abs(e.clientX-x0)>56&&Math.abs(e.clientY-y0)<28&&!arrastou){arrastou=true;toggleRisco(q,i)}
+  });
+  el.addEventListener("pointerup",()=>{setTimeout(()=>{x0=null},0)});
+  el.addEventListener("click",()=>{
+    if(arrastou||QST.respondida)return;
+    if((ST.riscos[q._ch]||[]).includes(i))return;
+    QST.selecionada=i;
+    document.querySelectorAll("#qAlts .alt").forEach(a=>a.classList.toggle("sel",+a.dataset.i===i));
+    $("#qResp").disabled=false;
+  });
+}
+function toggleRisco(q,i){
+  const r=ST.riscos[q._ch]||(ST.riscos[q._ch]=[]);
+  const p=r.indexOf(i);
+  if(p>=0)r.splice(p,1);else{r.push(i);if(QST.selecionada===i){QST.selecionada=null;$("#qResp").disabled=true}}
+  if(!r.length)delete ST.riscos[q._ch];
+  ARM.save("rt_riscos",ST.riscos);
+  const el=document.querySelector(`#qAlts .alt[data-i="${i}"]`);
+  if(el){el.classList.toggle("riscada",p<0);el.classList.remove("sel")}
+}
+function respondeQuestao(q){
+  if(QST.selecionada===null||QST.respondida)return;
+  QST.respondida=true;
+  const ok=QST.selecionada===q.gab;
+  const md0=metaDoDia();
+  registraResposta(q,QST.selecionada,ok,"estudo");
+  COMBO=ok?COMBO+1:0;
+  const md1=metaDoDia();
+  if(md0&&md1&&md0.hoje<md0.meta&&md1.hoje>=md0.meta)setTimeout(confete,250);
+  document.querySelectorAll("#qAlts .alt").forEach(el=>{
+    const i=+el.dataset.i;
+    if(i===q.gab)el.classList.add("certa");
+    else if(i===QST.selecionada)el.classList.add("errada");
+  });
+  $("#qResp").disabled=true;
+  $("#qFeed").innerHTML=`<div class="coment ${ok?"ok":"er"}">
+    <b class="${ok?"verde":"vermelho"}">${ok?"Acertou.":"Errou. Gabarito "+LETRAS[q.gab]+"."}</b>${ok&&COMBO>=2?`<span class="qCombo"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/></svg>${COMBO} seguidas</span>`:""}
+    <div style="margin-top:6px">${esc(q.coment)}</div>
+    ${q.porAlt?`<div class="porq">${q.porAlt.map((p,i)=>`<div><b>${LETRAS[i]})</b> ${esc(p)}</div>`).join("")}</div>`:""}
+    ${ok?"":`<div style="margin-top:10px"><button class="btn fant" id="qLog">Anotar no log de erros</button></div>`}
+  </div>`;
+  const bl=$("#qLog");
+  if(bl)bl.onclick=()=>{
+    ST.erros.unshift({id:novoIdLinha(),d:dataISO(),tema:q.tema,ref:q._ch,oque:(q.sub||q.tema)+": "+q.q.slice(0,80)+"…",porque:"",licao:""});
+    ARM.save("rt_erros",ST.erros);
+    UI.banner("info","Anotado no log de erros. Complete o motivo e a lição na aba Erros.");
+    bl.disabled=true;
+  };
+}
+
+/* ================== SIMULADO ================== */
+let cronSimId=null;
+function montaSimulado(){
+  clearInterval(cronSimId);
+  const s=ST.simativo;
+  if(s&&!s.fim){desenhaSimAtivo();return}
+  const sec=$("#sec-simulado");
+  delete sec.dataset.modo;
+  const hist=ST.sim.slice(-10).reverse();
+  sec.innerHTML=`
+  <div class="cartao">
+    <h2>Novo simulado</h2>
+    <p class="peq mut" style="margin-bottom:10px">Formato oficial (Edital 1909/2026): teórica com 60 questões em 3h; teórico-prática com 60 questões com imagem em 3h30. Corte: 60%. Sem gabarito durante a execução.</p>
+    <div class="linha">
+      <label class="peq mut">Questões <input id="simN" type="number" min="5" max="60" value="${Math.min(10,BANCO.length)}" style="width:80px"></label>
+      <label class="peq mut">Minutos <input id="simMin" type="number" min="5" max="240" value="30" style="width:80px"></label>
+      <span id="simTema"></span>
+      <button class="btn" id="simComeca">Começar</button>
+    </div>
+    <p class="peq mut" id="simAviso" style="margin-top:8px"></p>
+  </div>
+  ${hist.length?`<div class="cartao"><h2>Histórico</h2><div class="rolagem"><table>
+    <tr><th>Data</th><th>Questões</th><th>Nota</th><th></th></tr>
+    ${hist.map((h,i)=>`<tr><td>${esc(h.quando)}</td><td>${h.detalhes.length}</td>
+      <td class="${h.nota>=60?"verde":"vermelho"}">${h.nota.toFixed(0)}%</td>
+      <td><button class="btn fant peq" data-rev="${ST.sim.length-1-i}">rever</button></td></tr>`).join("")}
+  </table></div></div>`:""}`;
+  $("#simComeca").onclick=()=>{
+    const n=+$("#simN").value||10, min=+$("#simMin").value||30, temas=simTemas.valor();
+    let pool=BANCO.filter(q=>!temas.length||temas.includes(q.tema));
+    if(pool.length<n)$("#simAviso").textContent=`Só há ${pool.length} questões nesse filtro: o simulado vai usar todas.`;
+    const qs=espalhaTemas(embaralha(pool.slice()).slice(0,n)).map(q=>q._ch);
+    if(!qs.length)return;
+    ST.simativo={qs,resp:{},ini:Date.now(),min,pos:0};
+    ARM.save("rt_simativo",ST.simativo);
+    desenhaSimAtivo();
+  };
+  const simTemas=MTTemas.monta($("#simTema"),{opcoes:opcoesTemas(),selecionados:[],titulo:"Temas do simulado",verbo:"Usar",
+    aoMudar:ids=>{const n=BANCO.filter(q=>!ids.length||ids.includes(q.tema)).length;
+      $("#simAviso").textContent=ids.length?`${n} questões nos temas escolhidos.`:""}});
+  sec.querySelectorAll("[data-rev]").forEach(b=>b.onclick=()=>desenhaRevisao(+b.dataset.rev,0));
+}
+function desenhaSimAtivo(){
+  const s=ST.simativo, sec=$("#sec-simulado");
+  const qs=s.qs.map(ch=>QIDX.get(ch)).filter(Boolean);
+  if(!qs.length){ST.simativo=null;ARM.save("rt_simativo",null);montaSimulado();return}
+  if(s.pos>=qs.length)s.pos=0;
+  const q=qs[s.pos];
+  const volta=sec.dataset.modo==="ativo"&&+sec.dataset.pos>s.pos, mudou=sec.dataset.pos!==String(s.pos);
+  sec.dataset.modo="ativo";sec.dataset.pos=s.pos;
+  sec.innerHTML=`
+  <div class="cartao">
+    <div class="linha" style="justify-content:space-between">
+      <span id="cronSim">--:--</span>
+      <span class="mut peq">${Object.keys(s.resp).length}/${qs.length} respondidas</span>
+      <button class="btn perigo" id="simFim">Entregar</button>
+    </div>
+    <div class="gradeSim" style="margin-top:10px">
+      ${qs.map((qq,i)=>`<button class="${s.resp[qq._ch]!=null?"resp":""} ${i===s.pos?"atual":""}" data-i="${i}">${i+1}</button>`).join("")}
+    </div>
+  </div>
+  <div class="cartao qCard${q.img?" comImg":""}">
+    <div class="q-topo">${chipTema(q.tema)}
+      <span class="q-num">questão ${s.pos+1} de ${qs.length}</span></div>
+    ${q.img?`<figure class="q-img" id="simImg"><img src="${esc(q.img)}" alt="${esc(q.imgAlt||"imagem da questão")}"><span class="lupa">abrir no visor</span></figure>`:""}
+    <div class="q-enun">${esc(q.q)}</div>
+    <div id="simAlts">${q.alts.map((a,i)=>`
+      <button class="alt ${s.resp[q._ch]===i?"sel":""}" data-i="${i}">
+        <span class="letra">${LETRAS[i]}</span><span class="txt">${esc(a)}</span></button>`).join("")}</div>
+    <div class="navq">
+      <button class="btn fant" id="simAnt">‹</button>
+      <button class="btn fant" id="simProx" style="margin-left:auto">›</button>
+    </div>
+  </div>`;
+  if(mudou)entra(sec.querySelector(".qCard"),volta);
+  if(q.img)$("#simImg").onclick=()=>abreLuz(`visor.html?img=${encodeURIComponent(q.img)}&alt=${encodeURIComponent(q.imgAlt||"")}`);
+  sec.querySelectorAll(".gradeSim button").forEach(b=>b.onclick=()=>{s.pos=+b.dataset.i;ARM.save("rt_simativo",s);desenhaSimAtivo()});
+  sec.querySelectorAll("#simAlts .alt").forEach(b=>b.onclick=()=>{
+    s.resp[q._ch]=+b.dataset.i;ARM.save("rt_simativo",s);
+    if(s.pos<qs.length-1){s.pos++;ARM.save("rt_simativo",s)}
+    desenhaSimAtivo();
+  });
+  $("#simAnt").onclick=()=>{if(s.pos>0){s.pos--;ARM.save("rt_simativo",s);desenhaSimAtivo()}};
+  $("#simProx").onclick=()=>{if(s.pos<qs.length-1){s.pos++;ARM.save("rt_simativo",s);desenhaSimAtivo()}};
+  $("#simFim").onclick=()=>{
+    const faltam=qs.length-Object.keys(s.resp).length;
+    if(faltam&&!confirm(`Ainda faltam ${faltam} questões. Entregar mesmo assim?`))return;
+    finalizaSim(qs);
+  };
+  clearInterval(cronSimId);
+  const tick=()=>{
+    const rest=s.ini+s.min*60000-Date.now();
+    if(rest<=0){clearInterval(cronSimId);UI.banner("info","Tempo esgotado: simulado entregue.");finalizaSim(qs);return}
+    const mm=Math.floor(rest/60000),ss=Math.floor(rest%60000/1000);
+    const el=$("#cronSim");if(el)el.textContent=`${mm}:${String(ss).padStart(2,"0")}`;
+  };
+  tick();cronSimId=setInterval(tick,1000);
+}
+function finalizaSim(qs){
+  clearInterval(cronSimId);
+  const s=ST.simativo;if(!s)return;
+  const detalhes=qs.map(q=>{const alt=s.resp[q._ch];const ok=alt===q.gab;
+    if(alt!=null)registraResposta(q,alt,ok,"sim");
+    return {ch:q._ch,alt:alt==null?null:alt,ok:alt==null?false:ok}});
+  const acertos=detalhes.filter(d=>d.ok).length;
+  const nota=acertos/detalhes.length*100;
+  ST.sim.push({id:Date.now().toString(36),quando:dataISO(),nota,acertos,detalhes});
+  ARM.save("rt_sim",ST.sim);
+  ST.simativo=null;ARM.save("rt_simativo",null);
+  ARM.snapshot("fim-de-simulado");
+  desenhaRevisao(ST.sim.length-1,0,true);
+}
+function desenhaRevisao(iSim,pos,recem){
+  const sm=ST.sim[iSim];if(!sm){montaSimulado();return}
+  const sec=$("#sec-simulado");
+  const det=sm.detalhes.filter(d=>QIDX.has(d.ch)); // chave sumida do banco: descarta em silêncio
+  const d=det[Math.min(pos,det.length-1)],q=QIDX.get(d.ch);
+  const volta=sec.dataset.modo==="revisao"&&+sec.dataset.pos>pos;
+  sec.dataset.modo="revisao";sec.dataset.pos=pos;
+  sec.innerHTML=`
+  <div class="cartao">
+    <div class="linha" style="justify-content:space-between">
+      <div><div class="gd ${sm.nota>=60?"verde":"vermelho"}">${sm.nota.toFixed(0)}%</div>
+        <div class="peq mut">${sm.acertos}/${sm.detalhes.length} acertos • ${sm.nota>=60?"acima":"abaixo"} do corte de 60% • ${esc(sm.quando)}</div></div>
+      <button class="btn fant" id="revVoltar">Fechar revisão</button>
+    </div>
+    ${recem?`<p class="peq mut" style="margin-top:6px">Revisão navegável: clique na questão para revê-la com o comentário.</p>`:""}
+    <div class="gradeSim" style="margin-top:10px">
+      ${det.map((dd,i)=>`<button class="${dd.alt==null?"":dd.ok?"certa":"errada"} ${i===pos?"atual":""}" data-i="${i}">${i+1}</button>`).join("")}
+    </div>
+  </div>
+  <div class="cartao qCard${q.img?" comImg":""}">
+    <div class="q-topo">${chipTema(q.tema)}
+      ${q.fonte?`<span class="chip real">${esc(q.fonte.banca)} ${esc(q.fonte.ano)}</span>`:`<span class="chip aut">autoral</span>`}<span id="revSinal" style="margin-left:auto"></span></div>
+    ${q.img?`<figure class="q-img" id="revImg"><img src="${esc(q.img)}" alt="${esc(q.imgAlt||"imagem da questão")}"></figure>`:""}
+    <div class="q-enun">${esc(q.q)}</div>
+    ${q.alts.map((a,i)=>`<div class="alt ${i===q.gab?"certa":""} ${d.alt===i&&i!==q.gab?"errada":""}">
+      <span class="letra">${LETRAS[i]}</span><span class="txt">${esc(a)}</span></div>`).join("")}
+    <div class="coment"><div>${esc(q.coment)}</div>
+      ${q.porAlt?`<div class="porq">${q.porAlt.map((p,i)=>`<div><b>${LETRAS[i]})</b> ${esc(p)}</div>`).join("")}</div>`:""}</div>
+    <div class="navq">
+      <button class="btn fant" id="revAnt">‹ Anterior</button>
+      <button class="btn fant" id="revProx" style="margin-left:auto">Próxima ›</button>
+    </div>
+  </div>`;
+  entra(sec.querySelector(".qCard"),volta);
+  if(q.img)$("#revImg").onclick=()=>abreLuz(`visor.html?img=${encodeURIComponent(q.img)}&alt=${encodeURIComponent(q.imgAlt||"")}`);
+  $("#revVoltar").onclick=()=>montaSimulado();
+  { const S=sinalizador(); if(S)S.botao($("#revSinal"),{chave:q._ch,q:q.q,tema:TNOME[q.tema]||q.tema,extra:"gabarito "+LETRAS[q.gab]+" (revisão de simulado)"}); }
+  $("#revAnt").onclick=()=>{if(pos>0)desenhaRevisao(iSim,pos-1)};
+  $("#revProx").onclick=()=>{if(pos<det.length-1)desenhaRevisao(iSim,pos+1)};
+  sec.querySelectorAll(".gradeSim button").forEach(b=>b.onclick=()=>desenhaRevisao(iSim,+b.dataset.i));
+}
+
+/* ================== IMAGENS (iframe lazy) ================== */
+let frameImg=null;
+function montaImagens(modo){
+  const alvo=typeof modo==="string"?modo:"galeria";
+  $("#btGaleria").className=alvo==="galeria"?"btn":"btn fant";
+  $("#btTreino").className=alvo==="treino"?"btn":"btn fant";
+  const src=alvo==="treino"?"visor.html?modo=treino":"visor.html";
+  if(!frameImg){
+    frameImg=document.createElement("iframe");
+    frameImg.title="Visor de casos";
+    $("#quadroImg").appendChild(frameImg);
+    frameImg.src=src;
+  }else if(!frameImg.src.endsWith(src))frameImg.src=src;
+}
+addEventListener("message",e=>{
+  if(e.origin!==location.origin||!e.data||e.data.rt!=="treino")return;
+  const {id,ok,tempoS}=e.data;
+  const t=ST.treino[id]||(ST.treino[id]={n:0,ok:0,tempo:0});
+  t.n++;if(ok)t.ok++;t.tempo+=tempoS||0;t.ultimo=dataISO();t.ts=Date.now();
+  ARM.save("rt_treino",ST.treino); atividade(1);
+});
+
+/* ================== PAINEL ================== */
+function incidencia(){
+  const reais=BANCO.filter(q=>q.fonte);
+  if(reais.length<10)return {uniforme:true,map:Object.fromEntries(TAXONOMIA.map(t=>[t.id,1/TAXONOMIA.length]))};
+  const m={};TAXONOMIA.forEach(t=>m[t.id]=reais.filter(q=>q.tema===t.id).length/reais.length);
+  return {uniforme:false,map:m};
+}
+function statsTema(){
+  const por={};
+  for(const [ch,r] of Object.entries(ST.resp)){
+    const q=QIDX.get(ch);if(!q)continue;          // chave órfã: ignora (falha segura)
+    (por[q.tema]=por[q.tema]||[]).push(...r.hist);
+  }
+  return por;
+}
+function revisaoTemas(){
+  const por=statsTema();
+  return TAXONOMIA.map(t=>{
+    const hs=(por[t.id]||[]).slice().sort((a,b)=>a.d<b.d?-1:1);
+    if(!hs.length)return {t,nunca:true};
+    const ult=hs[hs.length-1].d,u20=hs.slice(-20);
+    const acc=u20.filter(h=>h.ok).length/u20.length;
+    const iv=Math.max(1,Math.min(15,Math.round(1+14*acc*acc)));
+    const due=addDiasISO(ult,iv);
+    return {t,ult,acc,iv,due,atrasado:due<dataISO()};
+  });
+}
+function ofensiva(){
+  let d=new Date(),n=0;
+  if(!ST.atividade[dataISO(d)])d.setDate(d.getDate()-1);
+  while(ST.atividade[dataISO(d)]){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function montaPainel(){
+  const sec=$("#sec-painel");
+  const inc=incidencia(),por=statsTema();
+  const totalResp=Object.values(ST.resp).reduce((a,r)=>a+r.hist.length,0);
+  const unicas=Object.keys(ST.resp).filter(ch=>QIDX.has(ch)).length;
+  const todasH=Object.values(por).flat();
+  const accG=taxaAcerto(todasH);
+  // prioridade
+  const linhas=TAXONOMIA.map(t=>{
+    const hs=por[t.id]||[],acc=taxaAcerto(hs);
+    const erro=acc===null?0.7:1-acc;
+    return {t,acc,erro,inc:inc.map[t.id]||0,pri:(inc.map[t.id]||0)*erro,semDados:acc===null};
+  }).sort((a,b)=>b.pri-a.pri);
+  const maxPri=Math.max(...linhas.map(l=>l.pri),0.0001);
+  // meta
+  const m=ST.meta;
+  let metaTxt="";
+  if(m.dataProva&&m.alvo){
+    const dias=Math.max(0,Math.ceil((new Date(m.dataProva+"T12:00:00")-new Date())/86400000));
+    const faltam=Math.max(0,m.alvo-totalResp);
+    metaTxt=dias>0?`faltam <b>${faltam}</b> questões em <b>${dias}</b> dias → <b>~${Math.ceil(faltam/dias)}</b>/dia`:`a prova é hoje: reta final`;
+  }
+  // heatmap 26 semanas
+  const hoje=new Date();const celulas=[];
+  const ini=new Date();ini.setDate(hoje.getDate()-(25*7+hoje.getDay()));
+  for(let i=0;i<26*7;i++){const d=new Date(ini);d.setDate(ini.getDate()+i);
+    if(d>hoje)break;
+    const n=ST.atividade[dataISO(d)]||0;
+    const nv=n===0?0:n<5?1:n<15?2:n<30?3:4;
+    celulas.push(`<i class="h${nv}" title="${dataISO(d)}: ${n}"></i>`)}
+  // cobertura do banco
+  const cob=TAXONOMIA.map(t=>({t,n:BANCO.filter(q=>q.tema===t.id).length}));
+  // treino de casos
+  const tr=Object.entries(ST.treino).map(([id,v])=>v);
+  const trN=tr.reduce((a,v)=>a+v.n,0),trOk=tr.reduce((a,v)=>a+v.ok,0);
+  // herói (23/09/2026, camada viva): só números que o app já calcula
+  const md=metaDoDia(), hojeQ=respostasHoje(), seq=ofensiva();
+  const qAtual=ST.pos.chq?QIDX.get(ST.pos.chq):null;
+  const R=62,C=2*Math.PI*R;
+  const frac=md?Math.min(1,md.hoje/md.meta):(accG||0);
+  const hr=new Date().getHours(),sauda=hr<12?"Bom dia":hr<18?"Boa tarde":"Boa noite";
+  const dias14=[...Array(14)].map((_,k)=>{const d=new Date();d.setDate(d.getDate()-13+k);const iso=dataISO(d);
+    return {iso,n:ST.atividade[iso]||0,l:"DSTQQSS"[d.getDay()],hoje:k===13}});
+  const max14=Math.max(1,...dias14.map(x=>x.n));
+  const nErradas=BANCO.filter(q=>{const r=respostaDe(q);return r&&r.hist.length&&!r.hist[r.hist.length-1].ok}).length;
+  const nCartoes=cartoesDeHoje().length, nReais=BANCO.filter(q=>q.fonte).length;
+  const ICO={fogo:'<path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/>',
+    alvo:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+    lista:'<path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+    olho:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    play:'<path d="M7 4v16l13-8z"/>',relogio:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/>',
+    refaz:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/>',carta:'<rect x="2" y="6" width="16" height="12" rx="2"/><path d="M22 4v12M6 10h8M6 14h5"/>',
+    log:'<path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+    cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'};
+  const ic=k=>`<svg class="ic" viewBox="0 0 24 24">${ICO[k]}</svg>`;
+  sec.innerHTML=`
+  <div class="vIni">
+   <section class="vHero">
+    <span class="bola b1"></span><span class="bola b2"></span><span class="bola b3"></span>
+    <div class="txt">
+     <small>${sauda}, ${esc(new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"}))}</small>
+     <h2>${md&&md.hoje>=md.meta?"Meta do dia cumprida":qAtual?"Continue de onde parou":"Vamos começar?"}</h2>
+     <p>${qAtual?`${esc(TNOME[qAtual.tema]||qAtual.tema)}: ${esc(qAtual.q)}`:`${BANCO.length} questões (${nReais} de prova real), ${FLASH.length} cartões e ${CASOS.length} casos de imagem.`}</p>
+     <div class="acoesH">
+      <button class="btn" data-ir="questoes">${ic("play")}${qAtual?"Retomar questões":"Começar questões"}</button>
+      <button class="btn fant" data-ir="simulado">${ic("relogio")}Simulado</button>
+     </div>
+    </div>
+    <div class="vAnel" role="img" aria-label="${md?`${md.hoje} de ${md.meta} questões hoje`:`acerto geral ${accG===null?"sem dados":Math.round(accG*100)+"%"}`}">
+     <svg width="150" height="150" viewBox="0 0 150 150">
+      <circle cx="75" cy="75" r="${R}" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="13"/>
+      <circle class="arco" cx="75" cy="75" r="${R}" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"
+       stroke-dasharray="${C.toFixed(1)}" style="stroke-dashoffset:${(C*(1-frac)).toFixed(1)}"${frac?"":' opacity="0"'}/></svg>
+     <div class="val">${md?`<b data-conta="${md.hoje}">${md.hoje}</b><span>de ${md.meta} hoje</span>`
+       :`<b data-conta="${accG===null?0:Math.round(accG*100)}" data-suf="%">${accG===null?"0%":Math.round(accG*100)+"%"}</b><span>acerto geral</span>`}</div>
+    </div>
+   </section>
+   <section class="vMeta">
+    <h3>Últimas duas semanas</h3>
+    <div class="sub">${dias14.reduce((a,x)=>a+x.n,0)} itens estudados (questões, cartões e casos)</div>
+    <div class="vSemana">${dias14.map(x=>`<div title="${x.iso}: ${x.n}"><i class="${x.hoje?"hoje":x.n?"com":""}" style="height:${Math.max(8,Math.round(x.n/max14*86))}px"></i><span>${x.l}</span></div>`).join("")}</div>
+   </section>
+   <div class="vStats">
+    <button class="vStat" style="--k:var(--c-petroleo)" data-ir="questoes"><span class="ic">${ic("lista")}</span><span><b data-conta="${totalResp}">${totalResp}</b><span>${totalResp===1?"resposta":"respostas"}, ${unicas} ${unicas===1?"questão única":"questões únicas"}</span></span></button>
+    <button class="vStat" style="--k:var(--c-verde)" data-ir="questoes"><span class="ic">${ic("alvo")}</span><span><b ${accG===null?"":`data-conta="${Math.round(accG*100)}" data-suf="%"`}>${accG===null?"—":Math.round(accG*100)+"%"}</b><span>acerto geral</span></span></button>
+    <button class="vStat fogo" style="--k:var(--c-ambar)" data-ir="plano"><span class="ic">${ic("fogo")}</span><span><b data-conta="${seq}">${seq}</b><span>${seq===1?"dia seguido":"dias seguidos"}</span></span></button>
+    <button class="vStat" style="--k:var(--c-violeta)" data-ir="treino"><span class="ic">${ic("olho")}</span><span><b ${trN?`data-conta="${Math.round(trOk/trN*100)}" data-suf="%"`:""}>${trN?Math.round(trOk/trN*100)+"%":"—"}</b><span>olho treinado, ${trN} casos lidos</span></span></button>
+   </div>
+   <div class="vAtalhos">
+    <button style="--k:var(--c-magenta)" data-ir="erradas"><i>${ic("refaz")}</i>Refazer as que errei (${nErradas})</button>
+    <button style="--k:var(--c-ciano)" data-ir="cartoes"><i>${ic("carta")}</i>Cartões para hoje (${nCartoes})</button>
+    <button style="--k:var(--c-violeta)" data-ir="treino"><i>${ic("olho")}</i>Olho treinado</button>
+    <button style="--k:var(--c-ardosia)" data-ir="erros"><i>${ic("log")}</i>Log de erros (${ST.erros.length})</button>
+    <button style="--k:var(--c-verde)" data-ir="plano"><i>${ic("cal")}</i>Plano</button>
+   </div>
+  </div>
+  <div class="cartao">
+    <h2>Meta até a prova</h2>
+    <div class="linha">
+      <label class="peq mut">Data da prova <input type="date" id="metaData" value="${esc(m.dataProva||"")}"></label>
+      <label class="peq mut">Alvo de questões <input type="number" id="metaAlvo" min="50" step="50" value="${esc(m.alvo||"")}" style="width:100px"></label>
+    </div>
+    <p style="margin-top:8px" id="metaTxt">${metaTxt||'<span class="mut peq">defina a data e o alvo</span>'}</p>
+  </div>
+  <div class="cartao">
+    <h2>Prioridade de estudo: incidência × taxa de erro</h2>
+    ${inc.uniforme?`<p class="peq mut" style="margin-bottom:8px">Ainda sem questões de prova real suficientes para calcular a incidência; usando peso uniforme por enquanto. A incidência real entra quando as provas anteriores forem classificadas.</p>`:""}
+    <div class="rolagem"><table>
+      <tr><th>Tema</th><th>Incid.</th><th>Erro</th><th>Prioridade</th></tr>
+      ${linhas.map(l=>`<tr class="clic" data-tema="${l.t.id}">
+        <td><span class="ponto" style="background:${(TCOR[l.t.id]||{}).b||"#999"}"></span>${esc(l.t.nome)}</td>
+        <td>${(l.inc*100).toFixed(0)}%</td>
+        <td>${l.semDados?'<span class="mut">sem dados</span>':Math.round(l.erro*100)+"%"}</td>
+        <td style="min-width:110px"><div class="barra"><i style="width:${(l.pri/maxPri*100).toFixed(0)}%;background:${(TCOR[l.t.id]||{}).b||"var(--brand)"}"></i></div></td>
+      </tr>`).join("")}
+    </table></div>
+  </div>
+  <div class="cartao">
+    <h2>Revisão espaçada por tema</h2>
+    <div class="rolagem"><table>
+      <tr><th>Tema</th><th>Último estudo</th><th>Acerto (últ. 20)</th><th>Revisar</th></tr>
+      ${revisaoTemas().map(r=>r.nunca
+        ?`<tr class="clic" data-tema="${r.t.id}"><td><span class="ponto" style="background:${(TCOR[r.t.id]||{}).b||"#999"}"></span>${esc(r.t.nome)}</td><td class="mut" colspan="2">nunca estudado</td><td class="ambar">começar</td></tr>`
+        :`<tr class="clic" data-tema="${r.t.id}"><td><span class="ponto" style="background:${(TCOR[r.t.id]||{}).b||"#999"}"></span>${esc(r.t.nome)}</td><td>${esc(r.ult)}</td><td>${Math.round(r.acc*100)}%</td>
+           <td class="${r.atrasado?"vermelho":"verde"}">${r.atrasado?"atrasado ("+r.due+")":r.due}</td></tr>`).join("")}
+    </table></div>
+    <p class="peq mut" style="margin-top:6px">Intervalo de 1 a 15 dias conforme o desempenho, derivado do histórico.</p>
+  </div>
+  <div class="cartao">
+    <h2>Atividade (26 semanas)</h2>
+    <div class="heat">${celulas.join("")}</div>
+  </div>
+  <div class="cartao">
+    <h2>Cobertura do banco (alvo 30/tema)</h2>
+    <div class="rolagem"><table>${cob.map(c=>`<tr class="clic" data-tema="${c.t.id}"><td><span class="ponto" style="background:${(TCOR[c.t.id]||{}).b||"#999"}"></span>${esc(c.t.nome)}</td>
+      <td style="width:56px;text-align:right" class="${c.n>=30?"verde":c.n?"ambar":"vermelho"}">${c.n}</td>
+      <td style="min-width:110px"><div class="barra"><i style="width:${Math.min(100,c.n/30*100)}%;background:${(TCOR[c.t.id]||{}).b||"var(--brand)"}"></i></div></td></tr>`).join("")}
+    </table></div>
+  </div>`;
+  const salvaMeta=()=>{ST.meta={dataProva:$("#metaData").value||null,alvo:+$("#metaAlvo").value||null};ARM.save("rt_meta",ST.meta);montaPainel();vivo(sec)};
+  sec.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>{
+    const v=b.dataset.ir;
+    if(v==="erradas"){ST.pos.fq={...filtrosQ(),status:"erradas"};ST.pos.chq=null;ARM.save("rt_pos",ST.pos);irAba("questoes")}
+    else if(v==="treino"){irAba("imagens");montaImagens("treino")}
+    else irAba(v);
+  });
+  $("#metaData").onchange=salvaMeta;$("#metaAlvo").onchange=salvaMeta;
+  sec.querySelectorAll("tr.clic").forEach(tr=>tr.onclick=()=>{
+    ST.pos.fq={temas:[tr.dataset.tema],status:"todas",real:false};ST.pos.chq=null;ARM.save("rt_pos",ST.pos);irAba("questoes");
+  });
+}
+
+/* ================== CARTÕES (SM-2 simplificado) ================== */
+function sm2(st,nota){
+  if(nota<3){st.reps=0;st.iv=1}
+  else{st.reps=(st.reps||0)+1;st.iv=st.reps===1?1:st.reps===2?6:Math.round((st.iv||1)*(st.ef||2.5))}
+  st.ef=Math.max(1.3,(st.ef||2.5)+(0.1-(5-nota)*(0.08+(5-nota)*0.02)));
+  st.due=addDiasISO(dataISO(),st.iv);
+  st.ts=Date.now();
+  return st;
+}
+function cartoesDeHoje(){
+  const hj=dataISO();
+  return FLASH.map(c=>({c,ch:chaveTxt(c.f),st:ST.flash[chaveTxtCache(c)]}))
+    .filter(x=>!x.st||x.st.due<=hj);
+}
+const _ctc={};function chaveTxtCache(c){return _ctc[c.f]||(_ctc[c.f]=chaveTxt(c.f))}
+function montaCartoes(){
+  const sec=$("#sec-cartoes");
+  const fila=cartoesDeHoje();
+  if(!fila.length){
+    const prox=Object.values(ST.flash).map(s=>s.due).sort()[0];
+    sec.innerHTML=`<div class="cartao flash"><div class="frente">Nenhum cartão para hoje.</div>
+      <div class="mut peq">${FLASH.length} cartões no total${prox?`, próxima revisão em ${esc(prox)}`:""}</div></div>`;
+    return;
+  }
+  const x=fila[0],c=x.c;
+  sec.innerHTML=`<div class="cartao">
+    <div class="linha peq mut" style="justify-content:space-between">
+      ${chipTema(c.tema||"fisica")}<span>${fila.length} para hoje</span></div>
+    <div class="flash">
+      <div class="frente">${esc(c.f)}</div>
+      <div class="verso" id="fcVerso" hidden>${esc(c.v)}</div>
+      <button class="btn" id="fcMostra">Mostrar resposta</button>
+      <div class="linha" id="fcNotas" hidden>
+        <button class="btn perigo" data-n="1">Errei</button>
+        <button class="btn fant" data-n="3">Difícil</button>
+        <button class="btn fant" data-n="4">Bom</button>
+        <button class="btn" data-n="5">Fácil</button>
+      </div>
+    </div></div>`;
+  $("#fcMostra").onclick=()=>{$("#fcVerso").hidden=false;$("#fcMostra").hidden=true;$("#fcNotas").hidden=false};
+  sec.querySelectorAll("#fcNotas button").forEach(b=>b.onclick=()=>{
+    const ch=chaveTxtCache(c);
+    ST.flash[ch]=sm2(ST.flash[ch]||{},+b.dataset.n);
+    ARM.save("rt_flash",ST.flash); atividade(1); montaCartoes();
+  });
+}
+
+/* ================== ERROS ================== */
+function montaErros(){
+  const sec=$("#sec-erros");
+  sec.innerHTML=`<div class="cartao">
+    <div class="linha" style="justify-content:space-between;margin-bottom:8px">
+      <h2 style="margin:0">Log de erros editável</h2>
+      <div class="linha">
+        <button class="btn fant" id="errCSV">Exportar CSV</button>
+        <button class="btn" id="errAdd">Adicionar</button>
+      </div>
+    </div>
+    <div class="rolagem"><table id="tbErros">
+      <tr><th style="width:92px">Data</th><th style="width:150px">Tema</th><th>O que errei</th><th>Por quê</th><th>Lição</th><th></th></tr>
+      ${ST.erros.map((e,i)=>`<tr>
+        <td><input data-i="${i}" data-c="d" value="${esc(e.d)}"></td>
+        <td><select data-i="${i}" data-c="tema">${TAXONOMIA.map(t=>`<option value="${t.id}" ${e.tema===t.id?"selected":""}>${esc(t.nome)}</option>`).join("")}</select></td>
+        <td><textarea data-i="${i}" data-c="oque">${esc(e.oque)}</textarea></td>
+        <td><textarea data-i="${i}" data-c="porque">${esc(e.porque)}</textarea></td>
+        <td><textarea data-i="${i}" data-c="licao">${esc(e.licao)}</textarea></td>
+        <td><button data-del="${i}" title="Excluir" class="vermelho">✕</button></td>
+      </tr>`).join("")}
+    </table></div>
+    ${ST.erros.length?"":'<p class="mut peq" style="margin-top:8px">Vazio. Erros anotados nas questões caem aqui.</p>'}
+  </div>`;
+  sec.querySelectorAll("input[data-c],textarea[data-c],select[data-c]").forEach(el=>{
+    el.onchange=()=>{ST.erros[+el.dataset.i][el.dataset.c]=el.value;ARM.save("rt_erros",ST.erros)};
+  });
+  sec.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    if(!confirm("Excluir esta linha do log?"))return;
+    ST.erros.splice(+b.dataset.del,1);ARM.save("rt_erros",ST.erros);montaErros();
+  });
+  $("#errAdd").onclick=()=>{ST.erros.unshift({id:novoIdLinha(),d:dataISO(),tema:TAXONOMIA[0].id,oque:"",porque:"",licao:""});ARM.save("rt_erros",ST.erros);montaErros()};
+  $("#errCSV").onclick=()=>{
+    const cab="data;tema;o_que_errei;por_que;licao";
+    const li=ST.erros.map(e=>[e.d,TNOME[e.tema]||e.tema,e.oque,e.porque,e.licao]
+      .map(v=>'"'+String(v||"").replace(/"/g,'""')+'"').join(";"));
+    baixaArquivo("radio-titulo-erros-"+dataISO()+".csv",[cab,...li].join("\n"),"text/csv");
+  };
+  /* questões sinalizadas com erro de conteúdo (mtsinal.js) */
+  const cs=document.createElement("div");cs.className="cartao";
+  cs.innerHTML=`<h2>Questões sinalizadas</h2><p class="peq mut" style="margin-bottom:10px">Questões que você marcou com a bandeira por erro de conteúdo. Elas também vão para a caixa de revisão do MedTech.</p><div id="listaSinal"></div>`;
+  sec.appendChild(cs);
+  { const S=sinalizador(); if(S)S.lista($("#listaSinal"),{abreQuestao:abreQuestaoSinal}); }
+}
+
+/* ================== PLANO ================== */
+function montaPlano(){
+  const sec=$("#sec-plano");
+  const hj=dataISO();
+  const plano=ST.plano.slice().sort((a,b)=>a.d<b.d?-1:1);
+  sec.innerHTML=`<div class="cartao">
+    <div class="linha" style="justify-content:space-between;margin-bottom:8px">
+      <h2 style="margin:0">Cronograma vivo</h2>
+      <div class="linha">
+        <button class="btn fant" id="plGera">Gerar rascunho até a prova</button>
+        <button class="btn" id="plAdd">Adicionar dia</button>
+      </div>
+    </div>
+    ${plano.length?`<div class="rolagem"><table>
+      <tr><th style="width:110px">Data</th><th>Tema</th><th style="width:60px">Feito</th><th style="width:90px"></th><th></th></tr>
+      ${plano.map(p=>{const i=ST.plano.indexOf(p);
+        const cls=p.feito?"verde":(p.d<hj?"vermelho":(p.d===hj?"ambar":""));
+        return `<tr>
+        <td class="${cls}">${p.d===hj?"<b>hoje</b> ":""}${esc(p.d)}</td>
+        <td><select data-i="${i}" data-c="tema">${TAXONOMIA.map(t=>`<option value="${t.id}" ${p.tema===t.id?"selected":""}>${esc(t.nome)}</option>`).join("")}</select></td>
+        <td><input type="checkbox" data-i="${i}" data-c="feito" ${p.feito?"checked":""}></td>
+        <td><button class="btn fant peq" data-vai="${p.tema}">questões</button></td>
+        <td><button data-del="${i}" class="vermelho" title="Excluir">✕</button></td></tr>`}).join("")}
+    </table></div>`:'<p class="mut peq">Sem plano ainda. Defina a data da prova no Painel e gere o rascunho, ou adicione dias manualmente.</p>'}
+  </div>`;
+  $("#plAdd").onclick=()=>{ST.plano.push({id:novoIdLinha(),d:hj,tema:TAXONOMIA[0].id,feito:false});ARM.save("rt_plano",ST.plano);montaPlano()};
+  $("#plGera").onclick=()=>{
+    if(!ST.meta.dataProva){UI.banner("info","Defina a data da prova no Painel primeiro.");return}
+    if(ST.plano.length&&!confirm("Substituir o plano atual pelo rascunho gerado? (dias já feitos são preservados)"))return;
+    const inc=incidencia(),por=statsTema();
+    const ordem=TAXONOMIA.map(t=>{const acc=taxaAcerto(por[t.id]||[]);
+      return {id:t.id,pri:(inc.map[t.id]||0)*(acc===null?0.7:1-acc)}}).sort((a,b)=>b.pri-a.pri).map(x=>x.id);
+    const feitos=Object.fromEntries(ST.plano.filter(p=>p.feito).map(p=>[p.d+"|"+p.tema,true]));
+    const novo=[];let d=hj,i=0;
+    while(d<ST.meta.dataProva){novo.push({id:novoIdLinha(),d,tema:ordem[i%ordem.length],feito:!!feitos[d+"|"+ordem[i%ordem.length]]});d=addDiasISO(d,1);i++}
+    ST.plano=novo;ARM.save("rt_plano",ST.plano);montaPlano();
+  };
+  sec.querySelectorAll("select[data-c],input[data-c]").forEach(el=>{
+    el.onchange=()=>{const p=ST.plano[+el.dataset.i];
+      if(el.dataset.c==="feito")p.feito=el.checked;else p[el.dataset.c]=el.value;
+      ARM.save("rt_plano",ST.plano);montaPlano()};
+  });
+  sec.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ST.plano.splice(+b.dataset.del,1);ARM.save("rt_plano",ST.plano);montaPlano()});
+  sec.querySelectorAll("[data-vai]").forEach(b=>b.onclick=()=>{
+    ST.pos.fq={temas:[b.dataset.vai],status:"todas",real:false};ST.pos.chq=null;ARM.save("rt_pos",ST.pos);irAba("questoes")});
+}
+
+/* ================== AJUSTES ================== */
+async function montaAjustes(){
+  const sec=$("#sec-ajustes");
+  sec.innerHTML=`
+  <div id="slotSync"></div>
+  <div class="cartao"><h2>Aplicativo</h2>
+    <table>
+      <tr><td>Versão</td><td>${V}</td></tr>
+      <tr><td>Banco</td><td>${BANCO.length} questões • ${FLASH.length} cartões • ${CASOS.length} casos de imagem</td></tr>
+      <tr><td>Edital de referência</td><td><a href="docs/normativa-cbr-2026-edital-1909.pdf" target="_blank" rel="noopener">Edital 1909, CBR/AMB 2026</a></td></tr>
+    </table>
+    <div class="linha" style="margin-top:10px">
+      <button class="btn fant" id="ajAtualiza">Buscar atualização</button>
+    </div>
+  </div>`;
+  if(window.RTSYNC)RTSYNC.renderCartao($("#slotSync"));
+  $("#ajAtualiza").onclick=async()=>{
+    try{
+      const regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r=>r.update()));
+      UI.banner("info","Verificação de atualização disparada, recarregando…");
+      setTimeout(()=>location.reload(),800);
+    }catch(e){location.reload()}
+  };
+}
+
+/* ---------- util ---------- */
+function baixaArquivo(nome,conteudo,tipo){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([conteudo],{type:tipo}));
+  a.download=nome;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function abreLuz(src){$("#luzFrame").src=src;$("#luz").classList.add("on")}
+$("#luzFecha").onclick=()=>{$("#luz").classList.remove("on");$("#luzFrame").src="about:blank"};
+$("#btGaleria").onclick=()=>montaImagens("galeria");
+$("#btTreino").onclick=()=>montaImagens("treino");
+
+/* ---------- boot ---------- */
+(async function boot(){
+  await ARM.boot();
+  carregaEstado();
+  montaAbas();
+  $("#subTopo").textContent=`v${V} • ${BANCO.length} questões • ${CASOS.length} casos`;
+  if(ARM.persistOK===false)console.warn("storage.persist() negado — comum no iOS; espelho IDB ativo.");
+  if(ST.simativo&&!ST.simativo.fim)UI.banner("info","Há um simulado em andamento: retome na aba Simulado.");
+  const h=location.hash.slice(1);
+  irAba(ABAS.some(a=>a[0]===h)?h:(ST.pos.aba&&ABAS.some(a=>a[0]===ST.pos.aba)?ST.pos.aba:"questoes"),false);
+  if("serviceWorker" in navigator){try{navigator.serviceWorker.register("sw.js")}catch(e){}}
+  ARM.snapshot("boot");
+  window.__rtPronto=true;window.dispatchEvent(new Event("rt-pronto"));
+})();
+
+/* ganchos de teste (verificação por DOM) */
+window.__rt={get ST(){return ST},ARM,chaveQ,chaveTxt,QIDX,irAba,registraResposta,V};
+</script>
+<script src="/_mtacesso.js?v=16"></script>
+<script>window.CONTA_CFG={app:"radio-titulo",nome:"RadioTítulo",pref:"rt_",global:"RTSYNC",ganchos:"__rt",core:"RTSYNC_CORE",
+  pronto:"rt-pronto",prontoFlag:"__rtPronto",idb:"rt-db",legadoApp:"radio-titulo",acesso:"radiotitulo"};</script>
+<script src="sync-legado.js"></script>
+<script src="conta-estudo.js"></script>
+<script src="/_mtvoltar.js?v=3" defer></script>
+<script src="/_mtinstalar.js?v=3" defer></script>
+</body>
+</html>

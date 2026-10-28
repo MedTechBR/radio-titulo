@@ -1,0 +1,19 @@
+{
+ "modalidade": "TC",
+ "sequencia": "crânio em janela óssea, axial, com reconstrução tridimensional",
+ "regiao": "neuro",
+ "achado": "solução de continuidade linear na tábua óssea, visível no corte axial em janela óssea e confirmada na reconstrução tridimensional",
+ "diagnostico": "fratura linear da calota craniana",
+ "confirmado": "rótulo da aula: slide 'FRATURA DA CALOTA CRANIANA' (aula de trauma do internato)",
+ "alt": "Tomografia de crânio em janela óssea e reconstrução 3D mostrando traço de fratura na calota",
+ "fonte": "Acervo de ensino do Dr. Matheus Parente — aula ABORDAGEM AO TRAUMA, slide 67",
+ "licenca": "acervo próprio, uso pessoal",
+ "autor": "Matheus Parente",
+ "setaNaFonte": true,
+ "arquivo": "img/neuro-tc-fratura-calota-001.webp",
+ "dimensoes": [
+  597,
+  375
+ ],
+ "origem_url": "/Users/matheusparente/Documents/Claude/_acervo-aulas/trauma-calota.png"
+}
