@@ -1,7 +1,7 @@
 /* RadioTítulo — service worker.
    REGRA DE DEPLOY: bumpar CACHE a CADA deploy (rt-v2, rt-v3...) — sem isso o usuário
    fica preso na versão velha e qualquer correção vira fantasma. */
-const CACHE = 'rt-v26';
+const CACHE = 'rt-v27';
 const NUCLEO = [
   './', 'index.html', 'visor.html',
   'banco.js', 'mtfiltro.js', 'mtsinal.js', 'taxonomia.js', 'flash.js', 'casos.js', 'mtsync.js', 'conta-estudo.js', 'sync-legado.js',
